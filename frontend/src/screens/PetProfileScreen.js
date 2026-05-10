@@ -1,54 +1,38 @@
-import React from 'react';
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
-import PetCard from '../components/PetCard';
-import CustomButton from '../components/CustomButton';
+import React from "react";
+
+import {
+    SafeAreaView,
+    Text,
+} from "react-native";
+
+import PetCard
+    from "../components/PetCard";
+
+import globalStyles
+    from "../theme/globalStyles";
 
 export default function PetProfileScreen() {
     return (
-        <View style={styles.container}>
-            <ScrollView contentContainerStyle={styles.scroll}>
-                <Text style={styles.header}>/// YOUR PARTY ///</Text>
+        <SafeAreaView
+            style={globalStyles.screen}
+        >
+            <Text style={globalStyles.title}>
+                PETS
+            </Text>
 
-                {/* Hardcoded pets */}
-                <PetCard
-                    petName="DOGE"
-                    species="Shiba Inu"
-                    level={5}
-                    imageUrl="https://via.placeholder.com/100/39FF14/000000?text=DOG"
-                />
-                <PetCard
-                    petName="NYAN"
-                    species="Space Cat"
-                    level={99}
-                    imageUrl="https://via.placeholder.com/100/FF007F/000000?text=CAT"
-                />
+            <Text style={globalStyles.subtitle}>
+                REGISTERED PETS
+            </Text>
 
-                <View style={styles.actionArea}>
-                    <CustomButton title="+ SUMMON NEW PET" onPress={() => {}} color="#00FFFF" />
-                </View>
-            </ScrollView>
-        </View>
+            <PetCard
+                petName="MILO"
+                breed="GOLDEN RETRIEVER"
+            />
+
+            <PetCard
+                petName="LUNA"
+                breed="PERSIAN CAT"
+            />
+        </SafeAreaView>
     );
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#111111',
-    },
-    scroll: {
-        padding: 20,
-    },
-    header: {
-        fontFamily: 'monospace',
-        color: '#39FF14',
-        fontSize: 22,
-        fontWeight: 'bold',
-        marginBottom: 20,
-        textAlign: 'center',
-        letterSpacing: 2,
-    },
-    actionArea: {
-        marginTop: 30,
-    }
-});

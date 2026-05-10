@@ -1,78 +1,141 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, KeyboardAvoidingView, Platform } from 'react-native';
-import InputField from '../components/InputField';
-import CustomButton from '../components/CustomButton';
+import React, { useState } from "react";
 
-export default function LoginScreen({ navigation }) {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+import {
+    SafeAreaView,
+    View,
+    Text,
+    StyleSheet,
+    Alert,
+} from "react-native";
+
+import InputField
+    from "../components/InputField";
+
+import CustomButton
+    from "../components/CustomButton";
+
+import globalStyles
+    from "../theme/globalStyles";
+
+import colors
+    from "../theme/colors/theme";
+
+import {
+    loginUser,
+} from "../services/auth.service";
+
+export default function LoginScreen({
+                                        navigation,
+                                    }) {
+    const [email, setEmail] =
+        useState("");
+
+    const [password, setPassword] =
+        useState("");
 
     const handleLogin = () => {
-        console.log("Player logging in...", email);
+        const result = loginUser(
+            email,
+            password
+        );
+
+        if (result.success) {
+            navigation.replace("Main");
+        } else {
+            Alert.alert(
+                "LOGIN FAILED",
+                result.message
+            );
+        }
     };
 
     return (
-        <KeyboardAvoidingView
-            style={styles.container}
-            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        <SafeAreaView
+            style={globalStyles.screen}
         >
-            <View style={styles.titleContainer}>
-                <Text style={styles.title}>NESTVET</Text>
-                <Text style={styles.subtitle}>PRESS START TO BEGIN</Text>
-            </View>
+            <View style={globalStyles.topAccent} />
 
-            <View style={styles.formContainer}>
-                <InputField
-                    label="PLAYER ID (EMAIL)"
-                    placeholder="ENTER EMAIL..."
-                    value={email}
-                    onChangeText={setEmail}
-                />
-                <InputField
-                    label="SECRET KEY (PASS)"
-                    placeholder="ENTER PASSWORD..."
-                    value={password}
-                    onChangeText={setPassword}
-                    secureTextEntry={true}
-                />
+            <View style={globalStyles.container}>
+                <View
+                    style={
+                        globalStyles.headerContainer
+                    }
+                >
+                    <Text
+                        style={globalStyles.title}
+                    >
+                        PET CARE
+                    </Text>
 
-                <View style={{ marginTop: 20 }}>
-                    <CustomButton title="START GAME" onPress={handleLogin} color="#39FF14" />
-                    <CustomButton title="CREATE SAVE FILE" onPress={() => {}} color="#00FFFF" />
+                    <Text
+                        style={
+                            globalStyles.subtitle
+                        }
+                    >
+                        RETRO PET MANAGEMENT
+                    </Text>
+                </View>
+
+                <View
+                    style={globalStyles.section}
+                >
+                    <InputField
+                        label="EMAIL"
+                        placeholder="ENTER EMAIL"
+                        value={email}
+                        onChangeText={setEmail}
+                    />
+
+                    <InputField
+                        label="PASSWORD"
+                        placeholder="ENTER PASSWORD"
+                        secureTextEntry
+                        value={password}
+                        onChangeText={
+                            setPassword
+                        }
+                    />
+
+                    <CustomButton
+                        title="LOGIN"
+                        onPress={handleLogin}
+                    />
+
+                    <CustomButton
+                        title="REGISTER"
+                        variant="secondary"
+                        onPress={() =>
+                            navigation.navigate(
+                                "Register"
+                            )
+                        }
+                    />
+                </View>
+
+                <View style={styles.footer}>
+                    <Text style={styles.footerText}>
+                        8BIT RETRO UI
+                    </Text>
                 </View>
             </View>
-        </KeyboardAvoidingView>
+        </SafeAreaView>
     );
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#000000',
-        padding: 20,
-        justifyContent: 'center',
-    },
-    titleContainer: {
-        alignItems: 'center',
-        marginBottom: 50,
-    },
-    title: {
-        fontFamily: 'monospace',
-        fontSize: 48,
-        color: '#FF007F', // Neon Pink
-        fontWeight: 'bold',
-        textShadowColor: '#FFFFFF',
-        textShadowOffset: { width: 2, height: 2 },
-        textShadowRadius: 1,
-    },
-    subtitle: {
-        fontFamily: 'monospace',
-        fontSize: 16,
-        color: '#FFFF00', // Yellow
+    footer: {
         marginTop: 10,
-        animation: 'blink 1s infinite',
+
+        alignItems: "center",
     },
-    formContainer: {
-        width: '100%',
-    }
+
+    footerText: {
+        color: colors.darkRed,
+
+        fontWeight: "800",
+
+        letterSpacing: 2,
+
+        fontSize: 12,
+    },
 });

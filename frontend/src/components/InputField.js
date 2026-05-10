@@ -1,17 +1,30 @@
-import React from 'react';
-import { View, Text, TextInput, StyleSheet } from 'react-native';
+import React from "react";
 
-export default function InputField({ label, placeholder, value, onChangeText, secureTextEntry }) {
+import {
+    View,
+    TextInput,
+    Text,
+    StyleSheet,
+} from "react-native";
+
+import colors from "../theme/colors/theme";
+
+export default function InputField({
+                                       label,
+                                       ...props
+                                   }) {
     return (
         <View style={styles.container}>
-            <Text style={styles.label}>{label} :</Text>
+            {label && (
+                <Text style={styles.label}>
+                    {label}
+                </Text>
+            )}
+
             <TextInput
+                placeholderTextColor="#777"
+                {...props}
                 style={styles.input}
-                placeholder={placeholder}
-                placeholderTextColor="#555555"
-                value={value}
-                onChangeText={onChangeText}
-                secureTextEntry={secureTextEntry}
             />
         </View>
     );
@@ -19,24 +32,34 @@ export default function InputField({ label, placeholder, value, onChangeText, se
 
 const styles = StyleSheet.create({
     container: {
-        marginVertical: 10,
-        width: '100%',
+        marginBottom: 14,
     },
+
     label: {
-        fontFamily: 'monospace',
-        color: '#FF007F', // Neon Pink
-        fontSize: 14,
-        marginBottom: 5,
-        fontWeight: 'bold',
-        textTransform: 'uppercase',
+        marginBottom: 8,
+
+        color: colors.darkRed,
+
+        fontWeight: "800",
+
+        letterSpacing: 1,
     },
+
     input: {
-        backgroundColor: '#000000',
+        height: 56,
+
+        backgroundColor: colors.white,
+
         borderWidth: 3,
-        borderColor: '#FF007F',
-        color: '#FFFFFF',
-        fontFamily: 'monospace',
-        fontSize: 16,
-        padding: 12,
+        borderColor: colors.black,
+
+        borderRadius: 10,
+
+        paddingHorizontal: 16,
+
+        color: colors.black,
+
+        fontSize: 15,
+        fontWeight: "700",
     },
 });

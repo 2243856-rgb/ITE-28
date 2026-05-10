@@ -1,83 +1,108 @@
-import React from 'react';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Text, StyleSheet, View } from 'react-native';
+import React from "react";
 
-const DummyScreen = ({ name }) => (
-    <View style={styles.dummyContainer}>
-        <Text style={styles.dummyText}>[ {name} SCREEN ]</Text>
-    </View>
-);
+import { createBottomTabNavigator }
+    from "@react-navigation/bottom-tabs";
+
+import Ionicons
+    from "@expo/vector-icons/Ionicons";
+
+import HomeScreen
+    from "../screens/HomeScreen";
+
+import ChatbotScreen
+    from "../screens/ChatbotScreen";
+
+import PetProfileScreen
+    from "../screens/PetProfileScreen";
+
+import colors
+    from "../theme/colors/theme";
 
 const Tab = createBottomTabNavigator();
 
 export default function BottomTabNavigator() {
     return (
         <Tab.Navigator
-            screenOptions={({ route }) => ({
-                headerShown: true,
-                headerStyle: styles.header,
-                headerTitleStyle: styles.headerTitle,
-                tabBarStyle: styles.tabBar,
-                tabBarActiveTintColor: '#39FF14',
-                tabBarInactiveTintColor: '#555555',
-                tabBarIcon: ({ color }) => {
-                    let icon;
-                    if (route.name === 'Quests') icon = '📜';
-                    else if (route.name === 'Companions') icon = '🐾';
-                    else if (route.name === 'Comm-Link') icon = '🤖';
-                    else if (route.name === 'System') icon = '⚙️';
+            screenOptions={{
+                headerShown: false,
 
-                    return <Text style={{ fontSize: 20, color }}>{icon}</Text>;
+                tabBarStyle: {
+                    backgroundColor: colors.red,
+
+                    borderTopWidth: 3,
+                    borderTopColor: colors.black,
+
+                    height: 72,
+
+                    paddingBottom: 6,
+                    paddingTop: 6,
                 },
-                tabBarLabelStyle: styles.tabLabel,
-            })}
+
+                tabBarActiveTintColor: colors.gold,
+
+                tabBarInactiveTintColor:
+                colors.white,
+
+                tabBarLabelStyle: {
+                    fontSize: 11,
+                    fontWeight: "900",
+                    letterSpacing: 1,
+                },
+            }}
         >
-            <Tab.Screen name="Quests" children={() => <DummyScreen name="QUESTS" />} />
-            <Tab.Screen name="Companions" children={() => <DummyScreen name="COMPANIONS" />} />
-            <Tab.Screen name="Comm-Link" children={() => <DummyScreen name="AI COMM-LINK" />} />
-            <Tab.Screen name="System" children={() => <DummyScreen name="SYSTEM" />} />
+            <Tab.Screen
+                name="HOME"
+                component={HomeScreen}
+
+                options={{
+                    tabBarIcon: ({
+                                     color,
+                                     size,
+                                 }) => (
+                        <Ionicons
+                            name="home"
+                            size={size}
+                            color={color}
+                        />
+                    ),
+                }}
+            />
+
+            <Tab.Screen
+                name="CHATBOT"
+                component={ChatbotScreen}
+
+                options={{
+                    tabBarIcon: ({
+                                     color,
+                                     size,
+                                 }) => (
+                        <Ionicons
+                            name="chatbox"
+                            size={size}
+                            color={color}
+                        />
+                    ),
+                }}
+            />
+
+            <Tab.Screen
+                name="PETS"
+                component={PetProfileScreen}
+
+                options={{
+                    tabBarIcon: ({
+                                     color,
+                                     size,
+                                 }) => (
+                        <Ionicons
+                            name="paw"
+                            size={size}
+                            color={color}
+                        />
+                    ),
+                }}
+            />
         </Tab.Navigator>
     );
 }
-
-const styles = StyleSheet.create({
-    tabBar: {
-        backgroundColor: '#000000',
-        borderTopWidth: 4,
-        borderTopColor: '#FF007F',
-        height: 70,
-        paddingBottom: 10,
-        paddingTop: 10,
-    },
-    tabLabel: {
-        fontFamily: 'monospace',
-        fontSize: 10,
-        fontWeight: 'bold',
-        textTransform: 'uppercase',
-    },
-    header: {
-        backgroundColor: '#000000',
-        borderBottomWidth: 4,
-        borderBottomColor: '#00FFFF',
-        shadowColor: 'transparent',
-        elevation: 0,
-    },
-    headerTitle: {
-        fontFamily: 'monospace',
-        color: '#00FFFF',
-        fontSize: 20,
-        fontWeight: 'bold',
-        letterSpacing: 2,
-    },
-    dummyContainer: {
-        flex: 1,
-        backgroundColor: '#111111',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    dummyText: {
-        fontFamily: 'monospace',
-        color: '#FFFFFF',
-        fontSize: 24,
-    }
-});

@@ -1,53 +1,77 @@
-import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import React from "react";
+import {
+    View,
+    Text,
+    StyleSheet,
+} from "react-native";
 
+import colors from "../theme/colors/theme";
 
-export default function AppointmentCard({ date, vetName, service }) {
+export default function AppointmentCard({
+                                            petName,
+                                            date,
+                                            service,
+                                        }) {
     return (
         <View style={styles.card}>
-            <Text style={styles.header}>QUEST: {service}</Text>
-            <View style={styles.divider} />
-            <Text style={styles.text}>NPC : Dr. {vetName}</Text>
-            <Text style={styles.text}>TIME: {date}</Text>
-            <Text style={styles.status}>[ STATUS: PENDING ]</Text>
+            <View style={styles.topBar} />
+
+            <Text style={styles.petName}>
+                {petName}
+            </Text>
+
+            <Text style={styles.info}>
+                DATE: {date}
+            </Text>
+
+            <Text style={styles.info}>
+                SERVICE: {service}
+            </Text>
         </View>
     );
 }
 
 const styles = StyleSheet.create({
     card: {
-        backgroundColor: '#000000',
-        borderWidth: 4,
-        borderColor: '#00FFFF', // Cyan
-        padding: 15,
-        marginVertical: 10,
-        width: '100%',
+        backgroundColor: colors.white,
+
+        borderWidth: 3,
+        borderColor: colors.black,
+
+        borderRadius: 10,
+
+        marginBottom: 16,
+
+        overflow: "hidden",
     },
-    header: {
-        fontFamily: 'monospace',
-        color: '#00FFFF',
+
+    topBar: {
+        height: 14,
+        backgroundColor: colors.red,
+
+        borderBottomWidth: 3,
+        borderBottomColor: colors.black,
+    },
+
+    petName: {
         fontSize: 18,
-        fontWeight: 'bold',
-        textTransform: 'uppercase',
-        marginBottom: 5,
-    },
-    divider: {
-        height: 2,
-        backgroundColor: '#00FFFF',
+        fontWeight: "900",
+
+        color: colors.black,
+
+        marginTop: 14,
+        marginHorizontal: 14,
         marginBottom: 10,
     },
-    text: {
-        fontFamily: 'monospace',
-        color: '#FFFFFF',
+
+    info: {
         fontSize: 14,
-        marginBottom: 5,
-    },
-    status: {
-        fontFamily: 'monospace',
-        color: '#FFFF00', // Yellow
-        fontSize: 14,
-        fontWeight: 'bold',
-        marginTop: 10,
-        textAlign: 'right',
+
+        color: colors.darkRed,
+
+        marginHorizontal: 14,
+        marginBottom: 10,
+
+        fontWeight: "700",
     },
 });
