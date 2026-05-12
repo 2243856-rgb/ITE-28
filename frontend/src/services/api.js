@@ -1,13 +1,24 @@
 import axios from 'axios';
-import { Platform } from 'react-native';
 
-const SERVER_URL = Platform.OS === 'android' ? 'http://10.0.2.2:3000/api' : 'http://localhost:3000/api';
+// This is your official Azure Backend URL
+const AZURE_BACKEND_URL = 'https://nestvetapplication-e2a0bzagaka3bhfq.eastasia-01.azurewebsites.net/api/v1';
 
 const api = axios.create({
-    baseURL: SERVER_URL,
+    baseURL: AZURE_BACKEND_URL,
     headers: {
         'Content-Type': 'application/json',
     },
+    // This allows your frontend to send and receive cookies (important for Login/Auth)
+    withCredentials: true 
 });
+
+// Optional: Add a simple interceptor to log errors for easier debugging in the browser console
+api.interceptors.response.use(
+    (response) => response,
+    (error) => {
+        console.error('API Error:', error.response ? error.response.data : error.message);
+        return Promise.reject(error);
+    }
+);
 
 export default api;
