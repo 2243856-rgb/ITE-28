@@ -3,7 +3,6 @@ const cors = require("cors");
 const helmet = require("helmet");
 const morgan = require("morgan");
 
-const authRoutes = require('./src/modules/auth/auth.routes'); 
 const petsRoutes = require("./src/modules/pets/pets.routes");
 const appointmentsRoutes = require('./src/modules/appointments/appointments.routes');
 const homeVisitsRoutes = require("./src/modules/home-visits/home-visits.routes");
