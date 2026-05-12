@@ -3,7 +3,6 @@ const cors = require("cors");
 const helmet = require("helmet");
 const morgan = require("morgan");
 
-// Fixed paths to match your actual folder structure
 const authRoutes = require('./src/modules/auth/auth.routes'); 
 const petsRoutes = require("./src/modules/pets/pets.routes");
 const appointmentsRoutes = require('./src/modules/appointments/appointments.routes');
@@ -19,27 +18,24 @@ app.use(cors());
 app.use(express.json());
 app.use(morgan("dev"));
 
-// 1. Health Check Route
+// --- ADD THESE TWO ROUTES HERE ---
+
 app.get("/health", (req, res) => {
-  return res.status(200).json({
-    service: "vet-booking-backend",
-    status: "ok"
-  });
+  return res.status(200).json({ status: "ok", service: "nestvet-backend" });
 });
 
-// 2. Base API Route
 app.get("/api", (req, res) => {
   return ok(res, { message: "Veterinary booking API is running." });
 });
 
-// 3. API V1 Routes
+// --------------------------------
+
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/pets", petsRoutes);
 app.use("/api/v1/appointments", appointmentsRoutes);
 app.use("/api/v1/home-visits", homeVisitsRoutes);
 app.use("/api/v1/medical-records", medicalRecordsRoutes);
 
-// 4. Error Handlers (Must be last)
 app.use(notFound);
 app.use(errorHandler);
 
