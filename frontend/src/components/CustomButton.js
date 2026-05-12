@@ -1,83 +1,50 @@
 import React from "react";
+import { View, Text, TextInput, StyleSheet } from "react-native";
 
-import {
-    TouchableOpacity,
-    Text,
-    StyleSheet,
-} from "react-native";
-
-import colors from "../theme/colors/theme";
-
-export default function CustomButton({
-                                         title,
-                                         onPress,
-                                         variant = "primary",
-                                     }) {
+// NOTE: Removed colors import because the file does not exist
+export default function InputField({
+    label,
+    placeholder,
+    value,
+    onChangeText,
+    secureTextEntry,
+    autoCapitalize,
+}) {
     return (
-        <TouchableOpacity
-            activeOpacity={0.8}
-
-            onPress={() => {
-                if (onPress) {
-                    onPress();
-                }
-            }}
-
-            style={[
-                styles.button,
-
-                variant === "secondary" &&
-                styles.secondaryButton,
-            ]}
-        >
-            <Text
-                style={[
-                    styles.text,
-
-                    variant === "secondary" &&
-                    styles.secondaryText,
-                ]}
-            >
-                {title}
-            </Text>
-        </TouchableOpacity>
+        <View style={styles.container}>
+            {label && <Text style={styles.label}>{label}</Text>}
+            <TextInput
+                style={styles.input}
+                placeholder={placeholder}
+                placeholderTextColor="#999"
+                value={value}
+                onChangeText={onChangeText}
+                secureTextEntry={secureTextEntry}
+                autoCapitalize={autoCapitalize || "none"}
+            />
+        </View>
     );
 }
 
 const styles = StyleSheet.create({
-    button: {
+    container: {
+        marginBottom: 15,
         width: "100%",
-
-        height: 56,
-
-        backgroundColor: colors.red,
-
-        borderWidth: 3,
-        borderColor: colors.black,
-
-        borderRadius: 10,
-
-        alignItems: "center",
-        justifyContent: "center",
-
-        marginTop: 12,
     },
-
-    secondaryButton: {
-        backgroundColor: colors.gold,
+    label: {
+        fontSize: 14,
+        fontWeight: "bold",
+        marginBottom: 5,
+        color: "#333",
     },
-
-    text: {
-        color: colors.white,
-
-        fontSize: 15,
-
-        fontWeight: "900",
-
-        letterSpacing: 1.5,
-    },
-
-    secondaryText: {
-        color: colors.black,
+    input: {
+        height: 50,
+        borderWidth: 1,
+        borderColor: "#CCC",
+        borderRadius: 8,
+        paddingHorizontal: 15,
+        fontSize: 16,
+        color: "#000",
+        backgroundColor: "#F9F9F9",
     },
 });
