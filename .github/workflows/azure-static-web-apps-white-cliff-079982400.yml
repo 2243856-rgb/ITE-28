@@ -30,10 +30,10 @@ jobs:
           app_location: "./frontend" 
           api_location: "" 
           output_location: "web-build" 
-          
-          skip_app_build: true 
-          
-          app_build_command: "npm install --legacy-peer-deps && npx expo export:web"
+          app_build_command: "npx expo export:web"
+        
+        env:
+          NPM_CONFIG_LEGACY_PEER_DEPS: true
 
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
