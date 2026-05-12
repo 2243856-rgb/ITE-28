@@ -16,9 +16,6 @@ import {
 import globalStyles
     from "../theme/globalStyles";
 
-import colors
-    from "../theme/colors/theme";
-
 import CustomButton
     from "../components/CustomButton";
 
