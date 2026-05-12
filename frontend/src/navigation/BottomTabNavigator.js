@@ -15,9 +15,6 @@ import ChatbotScreen
 import PetProfileScreen
     from "../screens/PetProfileScreen";
 
-import colors
-    from "../theme/colors/theme";
-
 const Tab = createBottomTabNavigator();
 
 export default function BottomTabNavigator() {
