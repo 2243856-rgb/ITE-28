@@ -25,9 +25,6 @@ import BookAppointmentScreen
 import PetsScreen
     from "../screens/PetProfileScreen";
 
-import BookingsScreen
-    from "../screens/BookingsScreen";
-
 import colors
     from "../theme/colors/theme";
 
@@ -114,11 +111,6 @@ export default function AppNavigator() {
                     options={{ title: "STATUS" }}
                 />
 
-                <Stack.Screen
-                    name="Bookings"
-                    component={BookingsScreen}
-                    options={{ title: "BOOKINGS" }}
-                />
             </Stack.Navigator>
         </NavigationContainer>
     );
