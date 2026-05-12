@@ -1,9 +1,3 @@
-const express = require("express");
-const cors = require("cors");
-const helmet = require("helmet");
-const morgan = require("morgan");
-
-// Ensure these paths match your folder structure exactly
 const authRoutes = require('./src/modules/auth/auth.routes'); 
 const petsRoutes = require("./src/modules/pets/pets.routes");
 const appointmentsRoutes = require('./src/modules/appointments/appointments.routes');
