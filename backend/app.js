@@ -4,12 +4,12 @@ const helmet = require("helmet");
 const morgan = require("morgan");
 
 const authRoutes = require('./src/modules/modules/auth/auth.routes'); 
-const petsRoutes = require("./modules/pets/pets.routes");
-const appointmentsRoutes = require("./modules/appointments/appointments.routes");
-const homeVisitsRoutes = require("./modules/home-visits/home-visits.routes");
-const medicalRecordsRoutes = require("./modules/medical-records/medical-records.routes");
-const { ok } = require("./utils/response");
-const { notFound, errorHandler } = require("./middlewares/error-handler");
+const petsRoutes = require("./src/modules/pets/pets.routes");
+const appointmentsRoutes = require("./src/modules/appointments/appointments.routes");
+const homeVisitsRoutes = require("./src/modules/home-visits/home-visits.routes");
+const medicalRecordsRoutes = require("./src/modules/medical-records/medical-records.routes");
+const { ok } = require("./src/utils/response");
+const { notFound, errorHandler } = require("./src/middlewares/error-handler");
 
 const app = express();
 
