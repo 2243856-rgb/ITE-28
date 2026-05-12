@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-
 import {
     SafeAreaView,
     View,
@@ -11,32 +10,18 @@ import {
 
 import InputField   from "../components/InputField";
 import CustomButton from "../components/CustomButton";
-import DropdownPicker from "../components/DropdownPicker";
-import globalStyles from "../theme/globalStyles";
-import colors from "../theme/colors/theme";
 
-const SERVICE_OPTIONS = [
-    "GENERAL CHECKUP",
-    "VACCINATION",
-    "DENTAL CLEANING",
-    "SPAY / NEUTER",
-    "GROOMING",
-    "DEWORMING",
-    "EAR CLEANING",
-    "BLOOD TEST",
-    "X-RAY",
-    "SURGERY CONSULTATION",
-];
+// NOTE: We removed DropdownPicker and theme imports because those files don't exist yet.
 
 export default function BookAppointmentScreen() {
     const [petName,  setPetName]  = useState("");
-    const [date,     setDate]     = useState("");
+    const [date,      setDate]      = useState("");
     const [service,  setService]  = useState("");
 
     function handleConfirm() {
         const trimmedPet     = petName.trim();
         const trimmedDate    = date.trim();
-        const selectedService = service;
+        const selectedService = service.trim();
 
         if (!trimmedPet || !trimmedDate || !selectedService) {
             Alert.alert("MISSING INFO", "Please fill in all fields before confirming.");
@@ -45,7 +30,7 @@ export default function BookAppointmentScreen() {
 
         Alert.alert(
             "APPOINTMENT BOOKED",
-            `Appointment for ${trimmedPet.toUpperCase()} on ${trimmedDate.toUpperCase()} (${selectedService}) has been confirmed.`,
+            `Appointment for ${trimmedPet.toUpperCase()} on ${trimmedDate.toUpperCase()} (${selectedService.toUpperCase()}) has been confirmed.`,
             [
                 {
                     text: "OK",
@@ -60,21 +45,21 @@ export default function BookAppointmentScreen() {
     }
 
     return (
-        <SafeAreaView style={globalStyles.screen}>
-            <View style={globalStyles.topAccent} />
+        <SafeAreaView style={styles.screen}>
+            <View style={styles.topAccent} />
 
             <ScrollView
                 showsVerticalScrollIndicator={false}
                 keyboardShouldPersistTaps="always"
                 contentContainerStyle={{ paddingBottom: 60 }}
             >
-                <View style={globalStyles.container}>
-                    <View style={globalStyles.headerContainer}>
-                        <Text style={globalStyles.title}>BOOK</Text>
-                        <Text style={globalStyles.subtitle}>APPOINTMENT FORM</Text>
+                <View style={styles.container}>
+                    <View style={styles.headerContainer}>
+                        <Text style={styles.title}>BOOK</Text>
+                        <Text style={styles.subtitle}>APPOINTMENT FORM</Text>
                     </View>
 
-                    <View style={[globalStyles.section, styles.formCard]}>
+                    <View style={styles.formCard}>
                         <InputField
                             label="PET NAME"
                             placeholder="e.g. MILO"
@@ -91,12 +76,13 @@ export default function BookAppointmentScreen() {
                             autoCapitalize="characters"
                         />
 
-                        <DropdownPicker
+                        {/* Temporarily using InputField instead of DropdownPicker */}
+                        <InputField
                             label="SERVICE"
+                            placeholder="e.g. VACCINATION"
                             value={service}
-                            options={SERVICE_OPTIONS}
-                            placeholder="SELECT SERVICE"
-                            onSelect={(val) => setService(val)}
+                            onChangeText={setService}
+                            autoCapitalize="characters"
                         />
 
                         <View style={styles.spacer} />
@@ -113,11 +99,33 @@ export default function BookAppointmentScreen() {
 }
 
 const styles = StyleSheet.create({
+    screen: {
+        flex: 1,
+        backgroundColor: "#FFFFFF",
+    },
+    topAccent: {
+        height: 5,
+        backgroundColor: "#007BFF",
+    },
+    container: {
+        padding: 20,
+    },
+    headerContainer: {
+        marginBottom: 20,
+    },
+    title: {
+        fontSize: 32,
+        fontWeight: "bold",
+        color: "#000000",
+    },
+    subtitle: {
+        fontSize: 18,
+        color: "#666666",
+    },
     formCard: {
         marginTop: 4,
     },
-
     spacer: {
-        height: 8,
+        height: 20,
     },
 });
