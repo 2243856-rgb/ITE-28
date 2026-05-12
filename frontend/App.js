@@ -1,7 +1,3 @@
-const authRoutes = require('./src/modules/auth/auth.routes'); 
-const petsRoutes = require("./src/modules/pets/pets.routes");
-const appointmentsRoutes = require('./src/modules/appointments/appointments.routes');
-const homeVisitsRoutes = require("./src/modules/home-visits/home-visits.routes");
 const medicalRecordsRoutes = require("./src/modules/medical-records/medical-records.routes");
 const { ok } = require("./src/utils/response");
 const { notFound, errorHandler } = require("./src/middlewares/error-handler");
