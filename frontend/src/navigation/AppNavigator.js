@@ -108,10 +108,10 @@ export default function AppNavigator() {
                 />
 
                 <Stack.Screen
-                    name="AdminPets"
-                    component={PetsScreen}
-                    options={{ title: "PETS" }}
-                />
+    name="AdminPets"
+    component={PetsScreen} 
+    options={{ title: "PETS" }}
+/>
 
                 <Stack.Screen
                     name="Staff"
