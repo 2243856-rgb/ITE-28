@@ -9,6 +9,9 @@
     "web": "expo start --web",
     "build": "npx expo export:web"
   },
+  "config": {
+    "npm_config_legacy_peer_deps": true
+  },
   "dependencies": {
     "@expo/metro-runtime": "~3.2.3",
     "@react-navigation/bottom-tabs": "^7.0.0",
