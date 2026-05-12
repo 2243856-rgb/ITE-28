@@ -25,7 +25,7 @@ app.get("/api", (req, res) => {
   });
 });
 
-get("/api", (req, res) => {
+app.get("/api", (req, res) => {
   return ok(res, { message: "Veterinary booking API is running." });
 });
 
