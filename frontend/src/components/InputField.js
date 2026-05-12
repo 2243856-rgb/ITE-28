@@ -1,30 +1,26 @@
 import React from "react";
+import { View, Text, TextInput, StyleSheet } from "react-native";
 
-import {
-    View,
-    TextInput,
-    Text,
-    StyleSheet,
-} from "react-native";
-
-import colors from "../theme/colors/theme";
-
+// We removed the colors import because the file doesn't exist
 export default function InputField({
-                                       label,
-                                       ...props
-                                   }) {
+    label,
+    placeholder,
+    value,
+    onChangeText,
+    secureTextEntry,
+    autoCapitalize,
+}) {
     return (
         <View style={styles.container}>
-            {label && (
-                <Text style={styles.label}>
-                    {label}
-                </Text>
-            )}
-
+            {label && <Text style={styles.label}>{label}</Text>}
             <TextInput
-                placeholderTextColor="#777"
-                {...props}
                 style={styles.input}
+                placeholder={placeholder}
+                placeholderTextColor="#999"
+                value={value}
+                onChangeText={onChangeText}
+                secureTextEntry={secureTextEntry}
+                autoCapitalize={autoCapitalize || "none"}
             />
         </View>
     );
@@ -32,34 +28,23 @@ export default function InputField({
 
 const styles = StyleSheet.create({
     container: {
-        marginBottom: 14,
+        marginBottom: 15,
+        width: "100%",
     },
-
     label: {
-        marginBottom: 8,
-
-        color: colors.darkRed,
-
-        fontWeight: "800",
-
-        letterSpacing: 1,
+        fontSize: 14,
+        fontWeight: "bold",
+        marginBottom: 5,
+        color: "#333", // Manual color instead of colors.text
     },
-
     input: {
-        height: 56,
-
-        backgroundColor: colors.white,
-
-        borderWidth: 3,
-        borderColor: colors.black,
-
-        borderRadius: 10,
-
-        paddingHorizontal: 16,
-
-        color: colors.black,
-
-        fontSize: 15,
-        fontWeight: "700",
+        height: 50,
+        borderWidth: 1,
+        borderColor: "#CCC", // Manual color instead of colors.border
+        borderRadius: 8,
+        paddingHorizontal: 15,
+        fontSize: 16,
+        color: "#000",
+        backgroundColor: "#F9F9F9",
     },
 });
