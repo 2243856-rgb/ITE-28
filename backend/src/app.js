@@ -3,7 +3,7 @@ const cors = require("cors");
 const helmet = require("helmet");
 const morgan = require("morgan");
 
-const authRoutes = require("./modules/auth/auth.routes");
+const authRoutes = require('./src/modules/modules/auth/auth.routes'); 
 const petsRoutes = require("./modules/pets/pets.routes");
 const appointmentsRoutes = require("./modules/appointments/appointments.routes");
 const homeVisitsRoutes = require("./modules/home-visits/home-visits.routes");
@@ -14,7 +14,7 @@ const { notFound, errorHandler } = require("./middlewares/error-handler");
 const app = express();
 
 app.use(helmet());
-app.use(cors());
+app.use(cors()); 
 app.use(express.json());
 app.use(morgan("dev"));
 
@@ -25,7 +25,7 @@ app.get("/health", (req, res) => {
   });
 });
 
-app.get("/api", (req, res) => {
+get("/api", (req, res) => {
   return ok(res, { message: "Veterinary booking API is running." });
 });
 
