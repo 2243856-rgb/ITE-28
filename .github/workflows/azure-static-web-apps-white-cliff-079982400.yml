@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - test
+
   pull_request:
     types: [opened, synchronize, reopened, closed]
     branches:
@@ -12,33 +13,49 @@ on:
 jobs:
   build_and_deploy_job:
     if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed')
+
     runs-on: ubuntu-latest
     name: Build and Deploy Job
+
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout Repository
+        uses: actions/checkout@v4
         with:
           submodules: true
           lfs: false
 
-      - name: Build And Deploy
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install Dependencies
+        working-directory: ./frontend
+        run: npm install
+        env:
+          NPM_CONFIG_LEGACY_PEER_DEPS: true
+
+      - name: Build Expo Web App
+        working-directory: ./frontend
+        run: npx expo export --platform web
+
+      - name: Deploy to Azure Static Web Apps
         id: builddeploy
         uses: Azure/static-web-apps-deploy@v1
         with:
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_WHITE_CLIFF_079982400 }}
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           action: "upload"
-          app_location: "./frontend" 
-          api_location: "" 
-          output_location: "web-build" 
-          app_build_command: "npx expo export:web"
-        
-        env:
-          NPM_CONFIG_LEGACY_PEER_DEPS: true
+
+          app_location: "./frontend/dist"
+          output_location: ""
 
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
+
     runs-on: ubuntu-latest
     name: Close Pull Request Job
+
     steps:
       - name: Close Pull Request
         id: closepullrequest
