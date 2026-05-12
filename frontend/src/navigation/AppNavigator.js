@@ -25,9 +25,6 @@ import BookAppointmentScreen
 import PetsScreen
     from "../screens/PetProfileScreen";
 
-import OnlineStatusScreen
-    from "../screens/OnlineStatusScreen";
-
 import BookingsScreen
     from "../screens/BookingsScreen";
 
