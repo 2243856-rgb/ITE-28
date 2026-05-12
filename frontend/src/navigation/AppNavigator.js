@@ -23,7 +23,7 @@ import BookAppointmentScreen
     from "../screens/BookAppointmentScreen";
 
 import PetsScreen
-    from "../screens/PetsScreen";
+    from "../screens/PetProfileScreen";
 
 import StaffScreen
     from "../screens/StaffScreen";
