@@ -18,23 +18,27 @@ app.use(cors());
 app.use(express.json());
 app.use(morgan("dev"));
 
-app.get("/api", (req, res) => {
+// 1. Health Check Route (For Azure to monitor)
+app.get("/health", (req, res) => {
   return res.status(200).json({
     service: "vet-booking-backend",
     status: "ok"
   });
 });
 
+// 2. Base API Route
 app.get("/api", (req, res) => {
   return ok(res, { message: "Veterinary booking API is running." });
 });
 
+// 3. Main Feature Routes
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/pets", petsRoutes);
 app.use("/api/v1/appointments", appointmentsRoutes);
 app.use("/api/v1/home-visits", homeVisitsRoutes);
 app.use("/api/v1/medical-records", medicalRecordsRoutes);
 
+// 4. Error Handling (Must be last)
 app.use(notFound);
 app.use(errorHandler);
 
