@@ -2,8 +2,8 @@ const express = require("express");
 const cors = require("cors");
 const helmet = require("helmet");
 const morgan = require("morgan");
-const app = express();
 
+// 1. All Imports
 const authRoutes = require('./src/modules/auth/auth.routes');
 const petsRoutes = require("./src/modules/pets/pets.routes");
 const appointmentsRoutes = require('./src/modules/appointments/appointments.routes');
@@ -12,16 +12,15 @@ const medicalRecordsRoutes = require("./src/modules/medical-records/medical-reco
 const { ok } = require("./src/utils/response");
 const { notFound, errorHandler } = require("./src/middlewares/error-handler");
 
-const app = express();
+const app = express(); // Only declare this ONCE
 
-app.use(express.json());
+// 2. Middlewares
 app.use(helmet());
 app.use(cors()); 
-app.use(express.json());
+app.use(express.json()); // Only need this once
 app.use(morgan("dev"));
 
-// --- ADD THESE TWO ROUTES HERE ---
-
+// 3. Health Check Routes
 app.get("/health", (req, res) => {
   return res.status(200).json({ status: "ok", service: "nestvet-backend" });
 });
@@ -30,14 +29,14 @@ app.get("/api", (req, res) => {
   return ok(res, { message: "Veterinary booking API is running." });
 });
 
-// --------------------------------
-
+// 4. API Routes
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/pets", petsRoutes);
 app.use("/api/v1/appointments", appointmentsRoutes);
 app.use("/api/v1/home-visits", homeVisitsRoutes);
 app.use("/api/v1/medical-records", medicalRecordsRoutes);
 
+// 5. Error Handling
 app.use(notFound);
 app.use(errorHandler);
 
