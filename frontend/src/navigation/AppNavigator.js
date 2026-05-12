@@ -122,7 +122,7 @@ export default function AppNavigator() {
                 <Stack.Screen
                     name="OnlineStatus"
                     component={OnlineStatusScreen}
-                    options={{ title: "SYSTEM STATUS" }}
+                    options={{ title: "STATUS" }}
                 />
 
                 <Stack.Screen
