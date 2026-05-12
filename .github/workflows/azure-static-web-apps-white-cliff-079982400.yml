@@ -30,6 +30,9 @@ jobs:
           app_location: "./frontend" 
           api_location: "" 
           output_location: "web-build" 
+          
+          skip_app_build: true 
+          
           app_build_command: "npm install --legacy-peer-deps && npx expo export:web"
 
   close_pull_request_job:
