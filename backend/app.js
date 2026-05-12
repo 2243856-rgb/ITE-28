@@ -18,7 +18,7 @@ app.use(cors());
 app.use(express.json());
 app.use(morgan("dev"));
 
-app.get("/health", (req, res) => {
+app.get("/api", (req, res) => {
   return res.status(200).json({
     service: "vet-booking-backend",
     status: "ok"
