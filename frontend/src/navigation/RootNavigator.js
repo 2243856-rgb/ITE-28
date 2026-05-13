@@ -22,6 +22,7 @@ export default function RootNavigator() {
 
     const isAdmin = user?.role === "ADMIN";
 
+    // Web and native: no token / no valid user → only auth stack (login/register).
     return (
         <NavigationContainer>
             {isAuthenticated ? (
