@@ -19,58 +19,62 @@ function validateCreate(body) {
   }
 }
 
-function createAppointment(req, res, next) {
+async function createAppointment(req, res, next) {
   try {
     validateCreate(req.body);
-    const result = service.createAppointment(req.user, req.body);
+    const result = await service.createAppointment(req.user, req.body);
     return ok(res, result, 201);
   } catch (err) {
     return next(err);
   }
 }
 
-function listAppointments(req, res, next) {
+async function listAppointments(req, res, next) {
   try {
-    const items = service.listAppointments(req.user);
+    const items = await service.listAppointments(req.user);
     return ok(res, { items, total: items.length });
   } catch (err) {
     return next(err);
   }
 }
 
-function getAppointment(req, res, next) {
+async function getAppointment(req, res, next) {
   try {
-    const item = service.getAppointment(req.user, req.params.appointmentId);
+    const item = await service.getAppointment(req.user, req.params.appointmentId);
     return ok(res, item);
   } catch (err) {
     return next(err);
   }
 }
 
-function patchAppointment(req, res, next) {
+async function patchAppointment(req, res, next) {
   try {
-    const item = service.updateAppointment(req.user, req.params.appointmentId, req.body);
+    const item = await service.updateAppointment(req.user, req.params.appointmentId, req.body);
     return ok(res, item);
   } catch (err) {
     return next(err);
   }
 }
 
-function patchAppointmentStatus(req, res, next) {
+async function patchAppointmentStatus(req, res, next) {
   try {
     if (!req.body.status) {
       throw new HttpError(400, "VALIDATION_ERROR", "status is required.");
     }
-    const item = service.updateAppointmentStatus(req.user, req.params.appointmentId, req.body.status);
+    const item = await service.updateAppointmentStatus(
+      req.user,
+      req.params.appointmentId,
+      req.body.status
+    );
     return ok(res, item);
   } catch (err) {
     return next(err);
   }
 }
 
-function deleteAppointment(req, res, next) {
+async function deleteAppointment(req, res, next) {
   try {
-    service.cancelAppointment(req.user, req.params.appointmentId);
+    await service.cancelAppointment(req.user, req.params.appointmentId);
     return res.status(204).send();
   } catch (err) {
     return next(err);

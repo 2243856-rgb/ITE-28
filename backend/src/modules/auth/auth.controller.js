@@ -37,9 +37,9 @@ async function login(req, res, next) {
   }
 }
 
-function me(req, res, next) {
+async function me(req, res, next) {
   try {
-    const result = authService.getCurrentUser(req.user.sub);
+    const result = await authService.getCurrentUser(req.user.sub);
     return ok(res, result);
   } catch (err) {
     return next(err);

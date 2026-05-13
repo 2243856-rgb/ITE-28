@@ -97,6 +97,7 @@ CREATE TABLE dbo.Appointments (
     ScheduledEnd DATETIME2 NOT NULL,
     Reason NVARCHAR(1000) NULL,
     Notes NVARCHAR(2000) NULL,
+    IsActive BIT NOT NULL DEFAULT 1,
     CreatedAt DATETIME2 NOT NULL DEFAULT SYSUTCDATETIME(),
     UpdatedAt DATETIME2 NOT NULL DEFAULT SYSUTCDATETIME(),
     CONSTRAINT FK_Appointments_Pets_PetId FOREIGN KEY (PetId) REFERENCES dbo.Pets(PetId),
@@ -121,6 +122,9 @@ CREATE TABLE dbo.HomeVisits (
     VisitStatus NVARCHAR(20) NOT NULL CHECK (VisitStatus IN ('SCHEDULED', 'ON_ROUTE', 'ARRIVED', 'COMPLETED', 'CANCELLED')),
     ArrivalTime DATETIME2 NULL,
     CompletionTime DATETIME2 NULL,
+    EtaMinutes INT NULL,
+    LastTrackedLatitude DECIMAL(9,6) NULL,
+    LastTrackedLongitude DECIMAL(9,6) NULL,
     CreatedAt DATETIME2 NOT NULL DEFAULT SYSUTCDATETIME(),
     UpdatedAt DATETIME2 NOT NULL DEFAULT SYSUTCDATETIME(),
     CONSTRAINT FK_HomeVisits_Appointments_AppointmentId FOREIGN KEY (AppointmentId) REFERENCES dbo.Appointments(AppointmentId)
@@ -223,4 +227,25 @@ CREATE INDEX IX_ChatSessions_UserId_StartedAt ON dbo.ChatSessions(UserId, Starte
 CREATE INDEX IX_ChatMessages_ChatSessionId_CreatedAt ON dbo.ChatMessages(ChatSessionId, CreatedAt);
 CREATE INDEX IX_NotificationLogs_UserId_CreatedAt ON dbo.NotificationLogs(UserId, CreatedAt DESC);
 CREATE INDEX IX_AuditLogs_EntityType_EntityId ON dbo.AuditLogs(EntityType, EntityId);
+GO
+
+/* Default clinic for MVP API (use as clinicId when booking if you have no other clinic) */
+IF NOT EXISTS (SELECT 1 FROM dbo.Clinics WHERE ClinicId = '00000000-0000-4000-8000-000000000001')
+BEGIN
+  INSERT INTO dbo.Clinics (
+    ClinicId, ClinicName, ContactEmail, ContactPhone, AddressLine, City, StateProvince, PostalCode, Country, IsActive
+  )
+  VALUES (
+    '00000000-0000-4000-8000-000000000001',
+    N'Default NestVet Clinic',
+    N'support@nestvet.local',
+    N'+63',
+    N'123 Main Street',
+    N'Metro Manila',
+    NULL,
+    N'0000',
+    N'Philippines',
+    1
+  );
+END
 GO

@@ -8,46 +8,46 @@ function validateCreate(body) {
   }
 }
 
-function createPet(req, res, next) {
+async function createPet(req, res, next) {
   try {
     validateCreate(req.body);
-    const pet = petsService.createPet(req.user.sub, req.body);
+    const pet = await petsService.createPet(req.user.sub, req.body);
     return ok(res, pet, 201);
   } catch (err) {
     return next(err);
   }
 }
 
-function listPets(req, res, next) {
+async function listPets(req, res, next) {
   try {
-    const pets = petsService.listPets(req.user, req.query.ownerUserId);
+    const pets = await petsService.listPets(req.user, req.query.ownerUserId);
     return ok(res, { items: pets, total: pets.length });
   } catch (err) {
     return next(err);
   }
 }
 
-function getPet(req, res, next) {
+async function getPet(req, res, next) {
   try {
-    const pet = petsService.getPetById(req.user, req.params.petId);
+    const pet = await petsService.getPetById(req.user, req.params.petId);
     return ok(res, pet);
   } catch (err) {
     return next(err);
   }
 }
 
-function updatePet(req, res, next) {
+async function updatePet(req, res, next) {
   try {
-    const pet = petsService.updatePet(req.user, req.params.petId, req.body);
+    const pet = await petsService.updatePet(req.user, req.params.petId, req.body);
     return ok(res, pet);
   } catch (err) {
     return next(err);
   }
 }
 
-function deletePet(req, res, next) {
+async function deletePet(req, res, next) {
   try {
-    petsService.removePet(req.user, req.params.petId);
+    await petsService.removePet(req.user, req.params.petId);
     return res.status(204).send();
   } catch (err) {
     return next(err);
