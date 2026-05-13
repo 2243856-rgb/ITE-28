@@ -14,10 +14,39 @@ const { ping: pingDb, isConfigured: isSqlConfigured } = require("./db/pool");
 
 const app = express();
 
+const corsOrigins = process.env.CORS_ORIGINS
+  ? process.env.CORS_ORIGINS.split(",").map((s) => s.trim()).filter(Boolean)
+  : null;
+
+app.use(
+  cors({
+    origin: corsOrigins && corsOrigins.length ? corsOrigins : true,
+    credentials: true
+  })
+);
 app.use(helmet());
-app.use(cors());
 app.use(express.json());
 app.use(morgan("dev"));
+
+app.get("/", (req, res) => {
+  return res.status(200).json({
+    service: "vet-booking-backend",
+    endpoints: {
+      health: "GET /health",
+      api: "GET /api",
+    authV1: "POST /api/v1/auth/login",
+    authCompat: "POST /auth/login, POST /api/auth/login (same handlers)"
+    }
+  });
+});
+
+app.get("/api/v1", (req, res) => {
+  return ok(res, {
+    message: "Veterinary booking API v1.",
+    auth: ["/api/v1/auth/login", "/api/v1/auth/register-owner", "/api/v1/auth/register (alias)"],
+    compat: ["/auth/login", "/api/auth/login", "/auth/register-owner", "/auth/register (alias)"]
+  });
+});
 
 app.get("/health", async (req, res) => {
   const base = {
@@ -58,6 +87,9 @@ app.get("/api", (req, res) => {
 });
 
 app.use("/api/v1/auth", authRoutes);
+/* Same routes without /api/v1 prefix (Azure Static Web Apps / older clients) */
+app.use("/auth", authRoutes);
+app.use("/api/auth", authRoutes);
 app.use("/api/v1/pets", petsRoutes);
 app.use("/api/v1/appointments", appointmentsRoutes);
 app.use("/api/v1/home-visits", homeVisitsRoutes);
