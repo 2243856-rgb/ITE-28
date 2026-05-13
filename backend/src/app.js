@@ -10,6 +10,7 @@ const homeVisitsRoutes = require("./modules/home-visits/home-visits.routes");
 const medicalRecordsRoutes = require("./modules/medical-records/medical-records.routes");
 const { ok } = require("./utils/response");
 const { notFound, errorHandler } = require("./middlewares/error-handler");
+const { ping: pingDb, isConfigured: isSqlConfigured } = require("./db/pool");
 
 const app = express();
 
@@ -18,11 +19,29 @@ app.use(cors());
 app.use(express.json());
 app.use(morgan("dev"));
 
-app.get("/health", (req, res) => {
-  return res.status(200).json({
+app.get("/health", async (req, res) => {
+  const base = {
     service: "vet-booking-backend",
     status: "ok"
-  });
+  };
+  if (!isSqlConfigured()) {
+    return res.status(200).json({ ...base, database: { configured: false } });
+  }
+  try {
+    const db = await pingDb();
+    return res.status(200).json({ ...base, database: db });
+  } catch (err) {
+    console.error("Database health check failed:", err.message);
+    const payload = {
+      ...base,
+      status: "degraded",
+      database: { configured: true, ok: false, error: "connection_failed" }
+    };
+    if (process.env.NODE_ENV !== "production") {
+      payload.database.detail = err.message;
+    }
+    return res.status(503).json(payload);
+  }
 });
 
 app.get("/api", (req, res) => {
