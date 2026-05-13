@@ -1,5 +1,7 @@
 import React from "react";
 import {
+    Alert,
+    Platform,
     SafeAreaView,
     View,
     Text,
@@ -10,19 +12,30 @@ import {
 import globalStyles from "../theme/globalStyles";
 import colors from "../theme/colors/theme";
 import { useAuth } from "../context/AuthContext";
-import { confirmDialog } from "../utils/confirmDialog";
+
+/** react-native-web's Alert.alert is a no-op; use window.confirm on web. */
+function confirmSignOut(title, message, onConfirm) {
+    if (Platform.OS === "web") {
+        const body = [title, message].filter(Boolean).join("\n\n");
+        const ok =
+            typeof globalThis.confirm === "function"
+                ? globalThis.confirm(body)
+                : true;
+        if (ok) onConfirm();
+        return;
+    }
+    Alert.alert(title, message, [
+        { text: "Cancel", style: "cancel" },
+        { text: "Sign out", style: "destructive", onPress: onConfirm },
+    ]);
+}
 
 export default function AdminProfileScreen() {
     const { user, logout } = useAuth();
 
     const onSignOut = () => {
-        confirmDialog("Sign out", "Sign out of the admin console?", {
-            cancelText: "Cancel",
-            confirmText: "Sign out",
-            destructive: true,
-            onConfirm: () => {
-                void logout();
-            },
+        confirmSignOut("Sign out", "Sign out of the admin console?", () => {
+            void logout();
         });
     };
 
