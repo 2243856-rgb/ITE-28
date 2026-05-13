@@ -6,6 +6,7 @@ import {
     ScrollView,
     Alert,
     StyleSheet,
+    Platform,
 } from "react-native";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 
@@ -14,16 +15,28 @@ import CustomButton from "../components/CustomButton";
 import DropdownPicker from "../components/DropdownPicker";
 import colors from "../theme/colors/theme";
 import { DEFAULT_CLINIC_ID } from "../config/env";
+import { PET_ANIMAL_TYPES } from "../constants/petSpecies";
 import { fetchPets } from "../services/pets.api";
 import { createAppointmentRequest } from "../services/appointments.api";
 
-function petLabel(p) {
-    return `${p.petName} (${p.species})`;
+function resolvePetsForAnimalType(allPets, animalTypeLabel) {
+    if (!animalTypeLabel) return [];
+    if (animalTypeLabel === "Other") return allPets;
+    const target = animalTypeLabel.trim().toLowerCase();
+    return allPets.filter(
+        (p) => (p.species || "").trim().toLowerCase() === target
+    );
+}
+
+function petPickLabel(p) {
+    const breed = p.breed ? ` · ${p.breed}` : "";
+    return `${p.petName} (${p.species})${breed}`;
 }
 
 export default function BookAppointmentScreen() {
     const navigation = useNavigation();
     const [pets, setPets] = useState([]);
+    const [animalType, setAnimalType] = useState("");
     const [petPickerValue, setPetPickerValue] = useState("");
     const [petId, setPetId] = useState("");
     const [startDate, setStartDate] = useState("");
@@ -31,39 +44,84 @@ export default function BookAppointmentScreen() {
     const [endTime, setEndTime] = useState("");
     const [reason, setReason] = useState("");
 
+    const matchingPets = resolvePetsForAnimalType(pets, animalType);
+    const showPetPicker = animalType && matchingPets.length > 1;
+    const petOptions = matchingPets.map(petPickLabel);
+
     useFocusEffect(
         useCallback(() => {
             (async () => {
                 const res = await fetchPets();
                 if (!res.ok) return;
                 setPets(res.items);
-                setPetId((pid) => {
-                    if (pid) return pid;
-                    if (res.items.length === 1) return res.items[0].petId;
-                    return pid;
-                });
-                setPetPickerValue((pv) => {
-                    if (pv) return pv;
-                    if (res.items.length === 1) return petLabel(res.items[0]);
-                    return pv;
-                });
+                const matches = resolvePetsForAnimalType(
+                    res.items,
+                    animalType
+                );
+                if (animalType && matches.length === 1) {
+                    setPetId(matches[0].petId);
+                    setPetPickerValue(petPickLabel(matches[0]));
+                }
             })();
-        }, [])
+        }, [animalType])
     );
 
-    const petOptions = pets.map(petLabel);
+    const onPickAnimalType = (label) => {
+        setAnimalType(label);
+        const matches = resolvePetsForAnimalType(pets, label);
+        if (matches.length === 1) {
+            setPetId(matches[0].petId);
+            setPetPickerValue(petPickLabel(matches[0]));
+        } else {
+            setPetId("");
+            setPetPickerValue("");
+        }
+    };
 
     const onPickPet = (label) => {
         setPetPickerValue(label);
-        const p = pets.find((x) => petLabel(x) === label);
+        const p = matchingPets.find((x) => petPickLabel(x) === label);
         setPetId(p ? p.petId : "");
+    };
+
+    const confirmBody = (title, message, onOk) => {
+        if (Platform.OS === "web") {
+            const ok =
+                typeof globalThis.confirm === "function"
+                    ? globalThis.confirm(`${title}\n\n${message}`)
+                    : true;
+            if (ok) onOk();
+            return;
+        }
+        Alert.alert(title, message, [{ text: "OK", onPress: onOk }]);
     };
 
     const submit = async () => {
         if (!petId) {
+            if (!animalType) {
+                Alert.alert(
+                    "Animal type",
+                    "Choose the type of animal for this visit."
+                );
+                return;
+            }
+            if (pets.length === 0) {
+                Alert.alert(
+                    "No pets on file",
+                    "Add a pet from the Pets tab first, then return here."
+                );
+                return;
+            }
+            if (matchingPets.length === 0) {
+                Alert.alert(
+                    "No matching pet",
+                    `You have no pets saved as “${animalType}”. Add one under Pets using that animal type, or choose “Other” to pick from all your pets.`
+                );
+                return;
+            }
             Alert.alert(
-                "Choose a pet",
-                "Add a pet under the Pets tab first, then try again."
+                "Choose your pet",
+                "Select which pet this appointment is for."
             );
             return;
         }
@@ -100,12 +158,9 @@ export default function BookAppointmentScreen() {
             return;
         }
 
-        Alert.alert("Booked", "Your appointment request was saved.", [
-            {
-                text: "OK",
-                onPress: () => navigation.goBack(),
-            },
-        ]);
+        confirmBody("Booked", "Your appointment request was saved.", () =>
+            navigation.goBack()
+        );
     };
 
     return (
@@ -121,6 +176,8 @@ export default function BookAppointmentScreen() {
                         <Text style={styles.title}>Book visit</Text>
                         <Text style={styles.subtitle}>
                             In-clinic appointment (MVP — one default clinic).
+                            Pick the same animal type you used when adding the pet
+                            under Pets (or choose “Other”).
                         </Text>
                     </View>
 
@@ -132,12 +189,40 @@ export default function BookAppointmentScreen() {
                     ) : null}
 
                     <DropdownPicker
-                        label="PET"
-                        value={petPickerValue}
-                        options={petOptions}
-                        onSelect={onPickPet}
-                        placeholder="SELECT PET"
+                        label="ANIMAL TYPE"
+                        value={animalType}
+                        options={PET_ANIMAL_TYPES}
+                        onSelect={onPickAnimalType}
+                        placeholder="SELECT ANIMAL"
                     />
+
+                    {animalType && matchingPets.length === 0 && pets.length > 0 ? (
+                        <Text style={styles.warn}>
+                            No pet on file matches “{animalType}”. Use the same
+                            spelling under Pets when you add a pet, or choose
+                            “Other” to see every pet you have saved.
+                        </Text>
+                    ) : null}
+
+                    {showPetPicker ? (
+                        <DropdownPicker
+                            label="YOUR PET"
+                            value={petPickerValue}
+                            options={petOptions}
+                            onSelect={onPickPet}
+                            placeholder="SELECT PET"
+                        />
+                    ) : null}
+
+                    {animalType && matchingPets.length === 1 ? (
+                        <Text style={styles.hint}>
+                            Visit for{" "}
+                            <Text style={styles.hintBold}>
+                                {matchingPets[0].petName}
+                            </Text>
+                            .
+                        </Text>
+                    ) : null}
 
                     <InputField
                         label="DATE (YYYY-MM-DD)"
@@ -205,6 +290,16 @@ const styles = StyleSheet.create({
         fontWeight: "700",
         marginBottom: 12,
         lineHeight: 20,
+    },
+    hint: {
+        fontSize: 14,
+        color: colors.textSecondary,
+        marginBottom: 14,
+        lineHeight: 20,
+    },
+    hintBold: {
+        fontWeight: "800",
+        color: colors.textPrimary,
     },
     spacer: {
         height: 8,
