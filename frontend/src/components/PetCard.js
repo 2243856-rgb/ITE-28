@@ -1,19 +1,13 @@
 import React from 'react';
 import { View, Text, Image, StyleSheet } from 'react-native';
 
-export default function PetCard({ petName, species, level = 1, imageUrl }) {
+export default function PetCard({ petName, species, level, imageUrl }) {
     return (
         <View style={styles.card}>
-            {}
-            <Image
-                source={{ uri: imageUrl || 'https://via.placeholder.com/100/39FF14/000000?text=PET' }}
-                style={styles.image}
-            />
-
-            <View style={styles.infoContainer}>
+            <Image source={{ uri: imageUrl }} style={styles.image} />
+            <View style={styles.info}>
                 <Text style={styles.name}>{petName}</Text>
-                <Text style={styles.stats}>CLASS: {species}</Text>
-                <Text style={styles.stats}>LVL  : {level}</Text>
+                <Text style={styles.details}>{species} | LVL {level}</Text>
             </View>
         </View>
     );
@@ -22,36 +16,31 @@ export default function PetCard({ petName, species, level = 1, imageUrl }) {
 const styles = StyleSheet.create({
     card: {
         flexDirection: 'row',
-        backgroundColor: '#000000',
-        borderWidth: 3,
-        borderColor: '#FFFFFF',
-        padding: 10,
-        marginVertical: 10,
-        alignItems: 'center',
+        backgroundColor: '#222222',
+        borderRadius: 10,
+        padding: 15,
+        marginBottom: 15,
+        borderWidth: 1,
+        borderColor: '#39FF14', // Hardcoded Neon Green
     },
     image: {
-        width: 80,
-        height: 80,
-        borderWidth: 2,
-        borderColor: '#FFFFFF',
-        backgroundColor: '#333333',
+        width: 60,
+        height: 60,
+        borderRadius: 30,
     },
-    infoContainer: {
+    info: {
         marginLeft: 15,
         justifyContent: 'center',
     },
     name: {
-        fontFamily: 'monospace',
-        color: '#39FF14', // Neon Green
-        fontSize: 20,
-        fontWeight: 'bold',
-        textTransform: 'uppercase',
-        marginBottom: 5,
-    },
-    stats: {
-        fontFamily: 'monospace',
         color: '#FFFFFF',
-        fontSize: 12,
-        marginTop: 2,
+        fontSize: 18,
+        fontWeight: 'bold',
+        fontFamily: 'monospace',
+    },
+    details: {
+        color: '#AAAAAA',
+        fontSize: 14,
+        fontFamily: 'monospace',
     },
 });
