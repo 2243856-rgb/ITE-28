@@ -12,7 +12,20 @@ const api = axios.create({
     withCredentials: false,
 });
 
+/** Set by scripts/inject-web-api-url.js on deployed web (GitHub secret EXPO_PUBLIC_API_URL). */
 api.interceptors.request.use((config) => {
+    try {
+        const g = typeof globalThis !== "undefined" ? globalThis : undefined;
+        const runtime =
+            g &&
+            typeof g.__NESTVET_API_BASE__ === "string" &&
+            g.__NESTVET_API_BASE__.trim();
+        if (runtime) {
+            config.baseURL = runtime.replace(/\/+$/, "");
+        }
+    } catch {
+        // ignore
+    }
     const token = getMemoryToken();
     if (token) {
         config.headers.Authorization = `Bearer ${token}`;
@@ -46,7 +59,7 @@ export function getApiErrorMessage(error, fallback = "Request failed") {
         error?.code === "ERR_NETWORK" ||
         error?.message === "Network Error"
     ) {
-        return "Cannot reach the API. Check EXPO_PUBLIC_API_URL, CORS, and that the backend is running.";
+        return "Cannot reach the API. Set GitHub secret EXPO_PUBLIC_API_URL to https://YOUR-API.azurewebsites.net/api/v1, redeploy, and confirm the backend is running (CORS / firewall).";
     }
 
     return error?.message || fallback;

@@ -5,7 +5,8 @@
       "/assets/*",
       "/_expo/static/js/web/*",
       "/metadata.json",
-      "/staticwebapp.config.json"
+      "/staticwebapp.config.json",
+      "/runtime-config.js"
     ]
   }
 }
