@@ -17,9 +17,8 @@ import globalStyles from "../theme/globalStyles";
 
 import colors from "../theme/colors/theme";
 
-import { loginUser } from "../services/auth.service";
+import { useAuth } from "../context/AuthContext";
 
-/** Inline mark — no bundled PNG required (CI-safe). Drop `assets/images/nestvet-logo.png` into the repo and swap in `<Image source={require(...)} />` if you want the full artwork. */
 function NestVetBrandMark() {
     return (
         <View style={styles.brandBlock} accessibilityRole="header">
@@ -37,17 +36,19 @@ function NestVetBrandMark() {
 }
 
 export default function LoginScreen({ navigation }) {
+    const { login, error: authError } = useAuth();
     const [email, setEmail] = useState("");
-
     const [password, setPassword] = useState("");
 
-    const handleLogin = () => {
-        const result = loginUser(email, password);
-
-        if (result.success) {
-            navigation.replace("Main");
-        } else {
-            Alert.alert("LOGIN FAILED", result.message);
+    const handleLogin = async () => {
+        const trimmedEmail = email.trim().toLowerCase();
+        if (!trimmedEmail || !password) {
+            Alert.alert("Sign in", "Enter email and password.");
+            return;
+        }
+        const res = await login(trimmedEmail, password);
+        if (!res.ok) {
+            Alert.alert("Sign in failed", res.message || "Try again.");
         }
     };
 
@@ -63,29 +64,42 @@ export default function LoginScreen({ navigation }) {
                 <View style={globalStyles.container}>
                     <NestVetBrandMark />
 
+                    {authError ? (
+                        <Text style={styles.inlineErr}>{authError}</Text>
+                    ) : null}
+
                     <View style={globalStyles.section}>
                         <InputField
                             label="EMAIL"
-                            placeholder="Enter your email"
+                            placeholder="you@example.com"
                             value={email}
                             onChangeText={setEmail}
+                            autoCapitalize="none"
                         />
 
                         <InputField
                             label="PASSWORD"
-                            placeholder="Enter your password"
+                            placeholder="Your password"
                             secureTextEntry
                             value={password}
                             onChangeText={setPassword}
                         />
 
-                        <CustomButton title="LOGIN" onPress={handleLogin} />
+                        <CustomButton title="SIGN IN" onPress={handleLogin} />
 
                         <CustomButton
-                            title="REGISTER"
+                            title="CREATE ACCOUNT"
                             variant="secondary"
                             onPress={() => navigation.navigate("Register")}
                         />
+                    </View>
+
+                    <View style={styles.hintBox}>
+                        <Text style={styles.hintTitle}>Demo account</Text>
+                        <Text style={styles.hintBody}>
+                            Email: demo@nestvet.app{"\n"}
+                            Password: password123
+                        </Text>
                     </View>
 
                     <View style={styles.footer}>
@@ -151,6 +165,31 @@ const styles = StyleSheet.create({
         letterSpacing: 0.15,
         lineHeight: 22,
         paddingHorizontal: 12,
+    },
+    inlineErr: {
+        color: colors.darkRed,
+        textAlign: "center",
+        marginBottom: 8,
+        fontWeight: "700",
+    },
+    hintBox: {
+        marginTop: 8,
+        padding: 14,
+        borderRadius: 12,
+        backgroundColor: colors.surfaceGoldTint,
+        borderWidth: 1,
+        borderColor: colors.border,
+    },
+    hintTitle: {
+        fontWeight: "800",
+        color: colors.textPrimary,
+        marginBottom: 6,
+        fontSize: 13,
+    },
+    hintBody: {
+        color: colors.textSecondary,
+        fontSize: 13,
+        lineHeight: 20,
     },
     footer: {
         marginTop: 28,

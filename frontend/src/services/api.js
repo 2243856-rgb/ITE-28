@@ -1,21 +1,35 @@
-import axios from 'axios';
-
-const AZURE_BACKEND_URL = 'https://nestvetapplication-e2a0bzagaka3bhfq.eastasia-01.azurewebsites.net/api/v1';
+import axios from "axios";
+import { API_BASE_URL } from "../config/env";
+import { getMemoryToken } from "./authSession";
 
 const api = axios.create({
-    baseURL: AZURE_BACKEND_URL,
+    baseURL: API_BASE_URL,
     headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
     },
-    withCredentials: true 
+    withCredentials: true,
+});
+
+api.interceptors.request.use((config) => {
+    const token = getMemoryToken();
+    if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
 });
 
 api.interceptors.response.use(
     (response) => response,
     (error) => {
-        console.error('API Error details:', error.response ? error.response.data : error.message);
+        const msg = error.response?.data?.error?.message || error.message;
+        // eslint-disable-next-line no-console
+        console.error("API:", msg, error.response?.data);
         return Promise.reject(error);
     }
 );
+
+export function getApiErrorMessage(error, fallback = "Request failed") {
+    return error?.response?.data?.error?.message || fallback;
+}
 
 export default api;

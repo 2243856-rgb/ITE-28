@@ -9,6 +9,7 @@ export default function InputField({
     onChangeText,
     secureTextEntry,
     autoCapitalize,
+    keyboardType,
 }) {
     return (
         <View style={styles.container}>
@@ -23,6 +24,7 @@ export default function InputField({
                 onChangeText={onChangeText}
                 secureTextEntry={secureTextEntry}
                 autoCapitalize={autoCapitalize || "none"}
+                keyboardType={keyboardType || "default"}
             />
         </View>
     );

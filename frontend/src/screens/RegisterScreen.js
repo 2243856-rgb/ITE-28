@@ -1,16 +1,55 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
     SafeAreaView,
     View,
     Text,
     ScrollView,
+    Alert,
+    StyleSheet,
 } from "react-native";
 
 import InputField from "../components/InputField";
 import CustomButton from "../components/CustomButton";
 import globalStyles from "../theme/globalStyles";
+import colors from "../theme/colors/theme";
+import { useAuth } from "../context/AuthContext";
 
 export default function RegisterScreen({ navigation }) {
+    const { register, error: authError, clearError } = useAuth();
+    const [fullName, setFullName] = useState("");
+    const [email, setEmail] = useState("");
+    const [phone, setPhone] = useState("");
+    const [password, setPassword] = useState("");
+
+    useEffect(() => {
+        clearError();
+    }, [clearError]);
+
+    const submit = async () => {
+        const name = fullName.trim();
+        const em = email.trim().toLowerCase();
+        if (!name || !em || !password) {
+            Alert.alert("Create account", "Name, email, and password are required.");
+            return;
+        }
+        if (password.length < 8) {
+            Alert.alert(
+                "Create account",
+                "Password must be at least 8 characters (server rule)."
+            );
+            return;
+        }
+        const res = await register({
+            fullName: name,
+            email: em,
+            password,
+            phoneNumber: phone.trim() || undefined,
+        });
+        if (!res.ok) {
+            Alert.alert("Registration failed", res.message || "Try again.");
+        }
+    };
+
     return (
         <SafeAreaView style={globalStyles.screen}>
             <View style={globalStyles.topAccent} />
@@ -21,27 +60,49 @@ export default function RegisterScreen({ navigation }) {
             >
                 <View style={globalStyles.container}>
                     <View style={globalStyles.headerContainer}>
-                        <Text style={globalStyles.title}>REGISTER</Text>
+                        <Text style={globalStyles.title}>Create account</Text>
                         <Text style={globalStyles.subtitle}>
-                            Create your clinic account
+                            Pet owners use this form to join NestVet.
                         </Text>
                     </View>
 
+                    {authError ? (
+                        <Text style={styles.inlineErr}>{authError}</Text>
+                    ) : null}
+
                     <View style={globalStyles.section}>
-                        <InputField placeholder="FULL NAME" />
-                        <InputField placeholder="EMAIL" />
                         <InputField
-                            placeholder="PASSWORD"
+                            label="FULL NAME"
+                            placeholder="Your name"
+                            value={fullName}
+                            onChangeText={setFullName}
+                        />
+                        <InputField
+                            label="EMAIL"
+                            placeholder="you@example.com"
+                            value={email}
+                            onChangeText={setEmail}
+                            autoCapitalize="none"
+                        />
+                        <InputField
+                            label="PHONE (OPTIONAL)"
+                            placeholder="+63…"
+                            value={phone}
+                            onChangeText={setPhone}
+                            keyboardType="phone-pad"
+                        />
+                        <InputField
+                            label="PASSWORD (8+ CHARACTERS)"
+                            placeholder="Choose a strong password"
                             secureTextEntry
+                            value={password}
+                            onChangeText={setPassword}
                         />
                     </View>
 
+                    <CustomButton title="CREATE ACCOUNT" onPress={submit} />
                     <CustomButton
-                        title="CREATE ACCOUNT"
-                        onPress={() => navigation.navigate("Login")}
-                    />
-                    <CustomButton
-                        title="BACK TO LOGIN"
+                        title="BACK TO SIGN IN"
                         variant="secondary"
                         onPress={() => navigation.navigate("Login")}
                     />
@@ -50,3 +111,12 @@ export default function RegisterScreen({ navigation }) {
         </SafeAreaView>
     );
 }
+
+const styles = StyleSheet.create({
+    inlineErr: {
+        color: colors.darkRed,
+        textAlign: "center",
+        marginBottom: 8,
+        fontWeight: "700",
+    },
+});
