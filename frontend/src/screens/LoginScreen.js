@@ -95,10 +95,10 @@ export default function LoginScreen({ navigation }) {
                     </View>
 
                     <View style={styles.hintBox}>
-                        <Text style={styles.hintTitle}>Demo account</Text>
+                        <Text style={styles.hintTitle}>Demo accounts</Text>
                         <Text style={styles.hintBody}>
-                            Email: demo@nestvet.app{"\n"}
-                            Password: password123
+                            Pet parent — demo@nestvet.app / password123{"\n"}
+                            Admin console — admin@nestvet.app / admin123
                         </Text>
                     </View>
 

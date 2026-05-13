@@ -6,10 +6,11 @@ import { NavigationContainer } from "@react-navigation/native";
 import { useAuth } from "../context/AuthContext";
 import AuthNavigator from "./AuthNavigator";
 import AppNavigator from "./AppNavigator";
+import AdminNavigator from "./AdminNavigator";
 import colors from "../theme/colors/theme";
 
 export default function RootNavigator() {
-    const { booting, isAuthenticated } = useAuth();
+    const { booting, isAuthenticated, user } = useAuth();
 
     if (booting) {
         return (
@@ -19,9 +20,15 @@ export default function RootNavigator() {
         );
     }
 
+    const isAdmin = user?.role === "ADMIN";
+
     return (
         <NavigationContainer>
-            {isAuthenticated ? <AppNavigator /> : <AuthNavigator />}
+            {isAuthenticated ? (
+                isAdmin ? <AdminNavigator /> : <AppNavigator />
+            ) : (
+                <AuthNavigator />
+            )}
         </NavigationContainer>
     );
 }

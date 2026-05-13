@@ -31,7 +31,9 @@ export default function UserProfileScreen() {
             <View style={globalStyles.topAccent} />
             <View style={globalStyles.container}>
                 <Text style={globalStyles.title}>Profile</Text>
-                <Text style={globalStyles.subtitle}>Your NestVet account</Text>
+                <Text style={globalStyles.subtitle}>
+                    Your NestVet pet parent account — sign out when finished.
+                </Text>
 
                 <View style={styles.card}>
                     <Row label="Name" value={user?.fullName || "—"} />

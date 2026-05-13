@@ -1,8 +1,7 @@
 const bcrypt = require("bcryptjs");
 
 /**
- * Demo owner — password: `password123`
- * (Register via API creates more accounts; this seed is for first-run login.)
+ * Demo users (in-memory): owner + admin (see Login screen hints).
  */
 const DEMO_OWNER_ID = "00000000-0000-4000-8000-000000000001";
 
@@ -14,6 +13,17 @@ const users = [
     phoneNumber: null,
     role: "OWNER",
     passwordHash: bcrypt.hashSync("password123", 10),
+    isActive: true,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString()
+  },
+  {
+    userId: "00000000-0000-4000-8000-000000000002",
+    fullName: "Clinic Admin",
+    email: "admin@nestvet.app",
+    phoneNumber: null,
+    role: "ADMIN",
+    passwordHash: bcrypt.hashSync("admin123", 10),
     isActive: true,
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString()
