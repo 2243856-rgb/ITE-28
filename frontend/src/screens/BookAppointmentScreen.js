@@ -15,9 +15,23 @@ import CustomButton from "../components/CustomButton";
 import DropdownPicker from "../components/DropdownPicker";
 import colors from "../theme/colors/theme";
 import { DEFAULT_CLINIC_ID } from "../config/env";
-import { PET_ANIMAL_TYPES } from "../constants/petSpecies";
 import { fetchPets } from "../services/pets.api";
 import { createAppointmentRequest } from "../services/appointments.api";
+
+/** Animal-type options for booking (must match pet species on file, or use "Other"). */
+const PET_ANIMAL_TYPES = [
+    "Dog",
+    "Cat",
+    "Rabbit",
+    "Hamster / gerbil / mouse",
+    "Guinea pig",
+    "Bird",
+    "Fish",
+    "Reptile",
+    "Ferret",
+    "Horse",
+    "Other",
+];
 
 function resolvePetsForAnimalType(allPets, animalTypeLabel) {
     if (!animalTypeLabel) return [];
@@ -45,7 +59,8 @@ export default function BookAppointmentScreen() {
     const [reason, setReason] = useState("");
 
     const matchingPets = resolvePetsForAnimalType(pets, animalType);
-    const showPetPicker = animalType && matchingPets.length > 1;
+    /** Always show pet dropdown when there is at least one matching pet (not only when 2+). */
+    const showPetPicker = Boolean(animalType && matchingPets.length >= 1);
     const petOptions = matchingPets.map(petPickLabel);
 
     useFocusEffect(
@@ -175,9 +190,9 @@ export default function BookAppointmentScreen() {
                     <View style={styles.headerContainer}>
                         <Text style={styles.title}>Book visit</Text>
                         <Text style={styles.subtitle}>
-                            In-clinic appointment (MVP — one default clinic).
-                            Pick the same animal type you used when adding the pet
-                            under Pets (or choose “Other”).
+                            From the Home tab, tap Book appointment to open this
+                            screen. Pick an animal type, then use Select pet
+                            (below) before choosing date and time.
                         </Text>
                     </View>
 
@@ -196,6 +211,13 @@ export default function BookAppointmentScreen() {
                         placeholder="SELECT ANIMAL"
                     />
 
+                    {pets.length > 0 && !animalType ? (
+                        <Text style={styles.stepHint}>
+                            Next: choose an animal type, then the Select pet menu
+                            appears directly under it.
+                        </Text>
+                    ) : null}
+
                     {animalType && matchingPets.length === 0 && pets.length > 0 ? (
                         <Text style={styles.warn}>
                             No pet on file matches “{animalType}”. Use the same
@@ -206,22 +228,12 @@ export default function BookAppointmentScreen() {
 
                     {showPetPicker ? (
                         <DropdownPicker
-                            label="YOUR PET"
+                            label="SELECT PET"
                             value={petPickerValue}
                             options={petOptions}
                             onSelect={onPickPet}
                             placeholder="SELECT PET"
                         />
-                    ) : null}
-
-                    {animalType && matchingPets.length === 1 ? (
-                        <Text style={styles.hint}>
-                            Visit for{" "}
-                            <Text style={styles.hintBold}>
-                                {matchingPets[0].petName}
-                            </Text>
-                            .
-                        </Text>
                     ) : null}
 
                     <InputField
@@ -291,15 +303,12 @@ const styles = StyleSheet.create({
         marginBottom: 12,
         lineHeight: 20,
     },
-    hint: {
-        fontSize: 14,
+    stepHint: {
+        fontSize: 13,
+        fontWeight: "600",
         color: colors.textSecondary,
         marginBottom: 14,
-        lineHeight: 20,
-    },
-    hintBold: {
-        fontWeight: "800",
-        color: colors.textPrimary,
+        lineHeight: 19,
     },
     spacer: {
         height: 8,
