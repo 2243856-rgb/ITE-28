@@ -1,32 +1,13 @@
-import React from "react";
-import {
-    View,
-    Text,
-    StyleSheet,
-} from "react-native";
+import React from 'react';
+import { View, Text, Image, StyleSheet } from 'react-native';
 
-import colors from "../theme/colors/theme";
-
-export default function PetCard({
-                                    petName,
-                                    breed,
-                                }) {
+export default function PetCard({ petName, species, level, imageUrl }) {
     return (
         <View style={styles.card}>
-            <View style={styles.iconBox}>
-                <Text style={styles.icon}>
-                    PET
-                </Text>
-            </View>
-
-            <View style={styles.infoContainer}>
-                <Text style={styles.name}>
-                    {petName}
-                </Text>
-
-                <Text style={styles.breed}>
-                    {breed}
-                </Text>
+            <Image source={{ uri: imageUrl }} style={styles.image} />
+            <View style={styles.info}>
+                <Text style={styles.name}>{petName}</Text>
+                <Text style={styles.details}>{species} | LVL {level}</Text>
             </View>
         </View>
     );
@@ -34,62 +15,32 @@ export default function PetCard({
 
 const styles = StyleSheet.create({
     card: {
-        flexDirection: "row",
-
-        alignItems: "center",
-
-        backgroundColor: colors.white,
-
-        borderWidth: 3,
-        borderColor: colors.black,
-
+        flexDirection: 'row',
+        backgroundColor: '#222222',
         borderRadius: 10,
-
-        padding: 14,
-
-        marginBottom: 14,
+        padding: 15,
+        marginBottom: 15,
+        borderWidth: 1,
+        borderColor: '#39FF14', // Hardcoded Neon Green
     },
-
-    iconBox: {
-        width: 70,
-        height: 70,
-
-        backgroundColor: colors.gold,
-
-        borderWidth: 3,
-        borderColor: colors.black,
-
-        borderRadius: 8,
-
-        alignItems: "center",
-        justifyContent: "center",
-
-        marginRight: 14,
+    image: {
+        width: 60,
+        height: 60,
+        borderRadius: 30,
     },
-
-    icon: {
-        fontWeight: "900",
-        color: colors.black,
+    info: {
+        marginLeft: 15,
+        justifyContent: 'center',
     },
-
-    infoContainer: {
-        flex: 1,
-    },
-
     name: {
+        color: '#FFFFFF',
         fontSize: 18,
-        fontWeight: "900",
-
-        color: colors.black,
-
-        marginBottom: 6,
+        fontWeight: 'bold',
+        fontFamily: 'monospace',
     },
-
-    breed: {
+    details: {
+        color: '#AAAAAA',
         fontSize: 14,
-
-        color: colors.darkRed,
-
-        fontWeight: "700",
+        fontFamily: 'monospace',
     },
 });
