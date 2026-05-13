@@ -9,6 +9,11 @@ on:
       - test
   workflow_dispatch:
 
+# Only one deploy at a time to this app — parallel runs cause OneDeploy 409 Conflict.
+concurrency:
+  group: azure-webapp-nestvet-${{ github.workflow }}
+  cancel-in-progress: false
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -51,6 +56,6 @@ jobs:
         uses: azure/webapps-deploy@v3
         with:
           app-name: 'NestVetApplication'
-          slot-name: 'Production'
+          # Production = default app; do not set slot-name to "Production" (wrong for API; use only for real slots e.g. staging).
           package: .
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_BB301BEE4688408C924029DA6005AE84 }}
