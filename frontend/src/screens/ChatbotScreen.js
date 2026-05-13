@@ -1,143 +1,141 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, TextInput, ScrollView, TouchableOpacity, KeyboardAvoidingView, Platform } from 'react-native';
+import React, { useState } from "react";
+import {
+    View,
+    Text,
+    TextInput,
+    FlatList,
+    StyleSheet,
+    SafeAreaView,
+    TouchableOpacity
+} from "react-native";
+import globalStyles from "../theme/globalStyles";
+
+// NOTE: Removed 'colors' import because the file does not exist.
 
 export default function ChatbotScreen() {
-    const [message, setMessage] = useState('');
-
-    const [chatLog, setChatLog] = useState([
-        { id: 1, sender: 'AI', text: 'COMM-LINK ESTABLISHED. HOW CAN I ASSIST YOUR COMPANIONS TODAY?' },
-        { id: 2, sender: 'PLAYER', text: 'My dog ate a weird mushroom.' },
-        { id: 3, sender: 'AI', text: 'ANALYZING... WARNING: PLEASE KEEP COMPANION CALM AND BOOK A VET QUEST IMMEDIATELY.' }
+    const [messages, setMessages] = useState([
+        { id: "1", text: "Hello! How can I help you and your pet today?", sender: "bot" }
     ]);
+    const [inputText, setInputText] = useState("");
 
-    const sendMessage = () => {
-        if (message.trim() === '') return;
+    const handleSend = () => {
+        if (inputText.trim().length === 0) return;
 
-        const newLog = [...chatLog, { id: Date.now(), sender: 'PLAYER', text: message }];
-        setChatLog(newLog);
-        setMessage('');
+        const userMessage = { id: Date.now().toString(), text: inputText, sender: "user" };
+        setMessages((prev) => [...prev, userMessage]);
+        setInputText("");
 
+        // Simple bot response simulation
+        setTimeout(() => {
+            const botResponse = {
+                id: (Date.now() + 1).toString(),
+                text: "That sounds interesting! Tell me more.",
+                sender: "bot"
+            };
+            setMessages((prev) => [...prev, botResponse]);
+        }, 1000);
     };
 
     return (
-        <KeyboardAvoidingView
-            style={styles.container}
-            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-            keyboardVerticalOffset={90}
-        >
-            <View style={styles.headerBox}>
-                <Text style={styles.header}>/// SECURE COMM-LINK ///</Text>
-                <Text style={styles.status}>STATUS: ONLINE</Text>
+        <SafeAreaView style={styles.screen}>
+            <View style={styles.header}>
+                <Text style={styles.headerTitle}>PET ASSISTANT</Text>
             </View>
 
-            <ScrollView style={styles.chatArea}>
-                {chatLog.map((msg) => (
-                    <View key={msg.id} style={msg.sender === 'AI' ? styles.aiMessage : styles.playerMessage}>
-                        <Text style={msg.sender === 'AI' ? styles.aiText : styles.playerText}>
-                            [{msg.sender}]: {msg.text}
+            <FlatList
+                data={messages}
+                keyExtractor={(item) => item.id}
+                renderItem={({ item }) => (
+                    <View style={[
+                        styles.messageBubble,
+                        item.sender === "user" ? styles.userBubble : styles.botBubble
+                    ]}>
+                        <Text style={item.sender === "user" ? styles.userText : styles.botText}>
+                            {item.text}
                         </Text>
                     </View>
-                ))}
-            </ScrollView>
+                )}
+                contentContainerStyle={styles.chatContainer}
+            />
 
-            <View style={styles.inputArea}>
-                <Text style={styles.prompt}>></Text>
+            <View style={styles.inputContainer}>
                 <TextInput
                     style={styles.input}
-                    placeholder="TRANSMIT MESSAGE..."
-                    placeholderTextColor="#555555"
-                    value={message}
-                    onChangeText={setMessage}
-                    onSubmitEditing={sendMessage}
+                    placeholder="Ask something..."
+                    value={inputText}
+                    onChangeText={setInputText}
                 />
-                <TouchableOpacity style={styles.sendButton} onPress={sendMessage}>
-                    <Text style={styles.sendText}>SEND</Text>
+                <TouchableOpacity style={styles.sendButton} onPress={handleSend}>
+                    <Text style={styles.sendButtonText}>SEND</Text>
                 </TouchableOpacity>
             </View>
-        </KeyboardAvoidingView>
+        </SafeAreaView>
     );
 }
 
 const styles = StyleSheet.create({
-    container: {
+    screen: {
         flex: 1,
-        backgroundColor: '#000000',
-    },
-    headerBox: {
-        borderBottomWidth: 2,
-        borderBottomColor: '#00FFFF',
-        padding: 15,
-        backgroundColor: '#111111',
-        alignItems: 'center',
+        backgroundColor: "#FFFFFF",
     },
     header: {
-        fontFamily: 'monospace',
-        color: '#00FFFF',
+        padding: 20,
+        borderBottomWidth: 1,
+        borderBottomColor: "#EEEEEE",
+        alignItems: "center",
+    },
+    headerTitle: {
         fontSize: 18,
-        fontWeight: 'bold',
+        fontWeight: "bold",
+        color: "#007BFF",
     },
-    status: {
-        fontFamily: 'monospace',
-        color: '#39FF14',
-        fontSize: 12,
-        marginTop: 5,
-    },
-    chatArea: {
-        flex: 1,
+    chatContainer: {
         padding: 15,
     },
-    aiMessage: {
-        marginBottom: 15,
-        paddingRight: 50,
+    messageBubble: {
+        padding: 12,
+        borderRadius: 15,
+        marginBottom: 10,
+        maxWidth: "80%",
     },
-    playerMessage: {
-        marginBottom: 15,
-        paddingLeft: 50,
-        alignItems: 'flex-end',
+    userBubble: {
+        alignSelf: "flex-end",
+        backgroundColor: "#007BFF",
     },
-    aiText: {
-        fontFamily: 'monospace',
-        color: '#00FFFF',
-        fontSize: 14,
-        lineHeight: 20,
+    botBubble: {
+        alignSelf: "flex-start",
+        backgroundColor: "#F0F0F0",
     },
-    playerText: {
-        fontFamily: 'monospace',
-        color: '#39FF14',
-        fontSize: 14,
-        lineHeight: 20,
-        textAlign: 'right',
+    userText: {
+        color: "#FFFFFF",
     },
-    inputArea: {
-        flexDirection: 'row',
-        borderTopWidth: 2,
-        borderTopColor: '#555555',
-        padding: 10,
-        alignItems: 'center',
-        backgroundColor: '#111111',
+    botText: {
+        color: "#333333",
     },
-    prompt: {
-        fontFamily: 'monospace',
-        color: '#39FF14',
-        fontSize: 18,
-        marginRight: 10,
+    inputContainer: {
+        flexDirection: "row",
+        padding: 15,
+        borderTopWidth: 1,
+        borderTopColor: "#EEEEEE",
+        alignItems: "center",
     },
     input: {
         flex: 1,
-        fontFamily: 'monospace',
-        color: '#FFFFFF',
-        fontSize: 16,
         height: 40,
+        borderWidth: 1,
+        borderColor: "#CCCCCC",
+        borderRadius: 20,
+        paddingHorizontal: 15,
+        marginRight: 10,
     },
     sendButton: {
-        backgroundColor: '#39FF14',
-        paddingHorizontal: 15,
+        backgroundColor: "#007BFF",
         paddingVertical: 10,
-        marginLeft: 10,
+        paddingHorizontal: 20,
+        borderRadius: 20,
     },
-    sendText: {
-        fontFamily: 'monospace',
-        color: '#000000',
-        fontWeight: 'bold',
-    }
+    sendButtonText: {
+        color: "#FFFFFF",
+        fontWeight: "bold",
+    },
 });
