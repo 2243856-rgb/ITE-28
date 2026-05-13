@@ -31,11 +31,15 @@ app.get("/health", async (req, res) => {
     const db = await pingDb();
     return res.status(200).json({ ...base, database: db });
   } catch (err) {
-    const detail =
-      err?.message ||
-      err?.originalError?.message ||
-      (err?.stack ? String(err.stack).split("\n")[0] : null) ||
-      String(err);
+    const detail = [
+      err?.message,
+      err?.originalError?.message,
+      err?.cause?.message,
+      err?.code ? `code=${err.code}` : null,
+      err?.number ? `errno=${err.number}` : null
+    ]
+      .filter(Boolean)
+      .join(" | ") || err?.name || String(err);
     console.error("Database health check failed:", detail, err);
     const payload = {
       ...base,
