@@ -79,7 +79,7 @@ export default function BottomTabNavigator() {
                 name="PROFILE"
                 component={UserProfileScreen}
                 options={{
-                    tabBarLabel: "Profile",
+                    tabBarLabel: "Account",
                     tabBarIcon: ({ color, size }) => (
                         <Ionicons name="person" size={size} color={color} />
                     ),

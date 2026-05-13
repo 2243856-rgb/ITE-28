@@ -68,6 +68,8 @@ export default function LoginScreen({ navigation }) {
                         <Text style={styles.inlineErr}>{authError}</Text>
                     ) : null}
 
+                    <Text style={styles.signInTitle}>Sign in</Text>
+
                     <View style={globalStyles.section}>
                         <InputField
                             label="EMAIL"
@@ -171,6 +173,13 @@ const styles = StyleSheet.create({
         textAlign: "center",
         marginBottom: 8,
         fontWeight: "700",
+    },
+    signInTitle: {
+        fontSize: 22,
+        fontWeight: "900",
+        color: colors.textPrimary,
+        letterSpacing: 1,
+        marginBottom: 4,
     },
     hintBox: {
         marginTop: 8,

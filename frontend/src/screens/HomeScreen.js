@@ -149,6 +149,13 @@ export default function HomeScreen() {
                             }
                         />
                     </View>
+
+                    <Text style={styles.adminHint}>
+                        To sign out, open the{" "}
+                        <Text style={styles.adminHintBold}>Account</Text> tab in
+                        the bar below, then tap{" "}
+                        <Text style={styles.adminHintBold}>Sign out</Text>.
+                    </Text>
                 </View>
             </ScrollView>
         </SafeAreaView>
@@ -218,5 +225,18 @@ const styles = StyleSheet.create({
         color: colors.textSecondary,
         letterSpacing: 1.5,
         marginBottom: 8,
+    },
+
+    adminHint: {
+        marginTop: 16,
+        fontSize: 13,
+        color: colors.textMuted,
+        lineHeight: 20,
+        textAlign: "center",
+        paddingHorizontal: 8,
+    },
+    adminHintBold: {
+        fontWeight: "800",
+        color: colors.textSecondary,
     },
 });

@@ -100,6 +100,13 @@ export default function UserHomeScreen() {
                     >
                         <Text style={styles.secondaryBtnText}>My appointments</Text>
                     </TouchableOpacity>
+
+                    <Text style={styles.accountHint}>
+                        To switch users or end your session, open the{" "}
+                        <Text style={styles.accountHintBold}>Account</Text> tab
+                        below and tap{" "}
+                        <Text style={styles.accountHintBold}>Sign out</Text>.
+                    </Text>
                 </View>
             </ScrollView>
         </SafeAreaView>
@@ -188,5 +195,17 @@ const styles = StyleSheet.create({
         color: colors.darkRed,
         fontWeight: "800",
         fontSize: 14,
+    },
+    accountHint: {
+        marginTop: 20,
+        fontSize: 13,
+        color: colors.textMuted,
+        lineHeight: 20,
+        textAlign: "center",
+        paddingHorizontal: 8,
+    },
+    accountHintBold: {
+        fontWeight: "800",
+        color: colors.textSecondary,
     },
 });
