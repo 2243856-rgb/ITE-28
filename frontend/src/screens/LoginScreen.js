@@ -6,6 +6,8 @@ import {
     Text,
     StyleSheet,
     ScrollView,
+    Platform,
+    Alert,
 } from "react-native";
 
 import InputField from "../components/InputField";
@@ -17,7 +19,22 @@ import globalStyles from "../theme/globalStyles";
 import colors from "../theme/colors/theme";
 
 import { useAuth } from "../context/AuthContext";
-import { showAlert } from "../utils/showAlert";
+
+/** react-native-web's Alert.alert is a no-op; use window.alert on web. */
+function alertUser(title, message) {
+    if (Platform.OS === "web") {
+        const body = message ? `${title}\n\n${message}` : title;
+        if (typeof globalThis.alert === "function") {
+            globalThis.alert(body);
+        }
+        return;
+    }
+    if (message) {
+        Alert.alert(title, message);
+    } else {
+        Alert.alert(title);
+    }
+}
 
 function NestVetBrandMark() {
     return (
@@ -43,12 +60,12 @@ export default function LoginScreen({ navigation }) {
     const handleLogin = async () => {
         const trimmedEmail = email.trim().toLowerCase();
         if (!trimmedEmail || !password) {
-            showAlert("Sign in", "Enter email and password.");
+            alertUser("Sign in", "Enter email and password.");
             return;
         }
         const res = await login(trimmedEmail, password);
         if (!res.ok) {
-            showAlert("Sign in failed", res.message || "Try again.");
+            alertUser("Sign in failed", res.message || "Try again.");
         }
     };
 

@@ -5,6 +5,8 @@ import {
     Text,
     ScrollView,
     StyleSheet,
+    Platform,
+    Alert,
 } from "react-native";
 
 import InputField from "../components/InputField";
@@ -12,7 +14,22 @@ import CustomButton from "../components/CustomButton";
 import globalStyles from "../theme/globalStyles";
 import colors from "../theme/colors/theme";
 import { useAuth } from "../context/AuthContext";
-import { showAlert } from "../utils/showAlert";
+
+/** react-native-web's Alert.alert is a no-op; use window.alert on web. */
+function alertUser(title, message) {
+    if (Platform.OS === "web") {
+        const body = message ? `${title}\n\n${message}` : title;
+        if (typeof globalThis.alert === "function") {
+            globalThis.alert(body);
+        }
+        return;
+    }
+    if (message) {
+        Alert.alert(title, message);
+    } else {
+        Alert.alert(title);
+    }
+}
 
 export default function RegisterScreen({ navigation }) {
     const { register, error: authError, clearError } = useAuth();
@@ -29,14 +46,14 @@ export default function RegisterScreen({ navigation }) {
         const name = fullName.trim();
         const em = email.trim().toLowerCase();
         if (!name || !em || !password) {
-            showAlert(
+            alertUser(
                 "Create account",
                 "Name, email, and password are required."
             );
             return;
         }
         if (password.length < 8) {
-            showAlert(
+            alertUser(
                 "Create account",
                 "Password must be at least 8 characters (server rule)."
             );
@@ -53,7 +70,7 @@ export default function RegisterScreen({ navigation }) {
                 res.phase === "login"
                     ? "Sign-in after register"
                     : "Registration failed";
-            showAlert(title, res.message || "Try again.");
+            alertUser(title, res.message || "Try again.");
         }
     };
 
