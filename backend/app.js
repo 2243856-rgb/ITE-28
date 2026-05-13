@@ -23,6 +23,18 @@ app.use(
 app.use(express.json());
 app.use(morgan("dev"));
 
+app.get("/", (req, res) => {
+  return res.status(200).json({
+    service: "vet-booking-backend",
+    message:
+      "API is running. This URL is the backend only; open your Static Web App URL for the web UI.",
+    links: {
+      health: "/health",
+      api: "/api"
+    }
+  });
+});
+
 app.get("/health", (req, res) => {
   return res.status(200).json({
     service: "vet-booking-backend",
