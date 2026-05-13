@@ -31,14 +31,19 @@ app.get("/health", async (req, res) => {
     const db = await pingDb();
     return res.status(200).json({ ...base, database: db });
   } catch (err) {
-    console.error("Database health check failed:", err.message);
+    const detail =
+      err?.message ||
+      err?.originalError?.message ||
+      (err?.stack ? String(err.stack).split("\n")[0] : null) ||
+      String(err);
+    console.error("Database health check failed:", detail, err);
     const payload = {
       ...base,
       status: "degraded",
       database: { configured: true, ok: false, error: "connection_failed" }
     };
     if (process.env.NODE_ENV !== "production") {
-      payload.database.detail = err.message;
+      payload.database.detail = detail || "unknown_error";
     }
     return res.status(503).json(payload);
   }
