@@ -46,18 +46,7 @@ jobs:
 
       - name: Build Expo Web App
         working-directory: ./frontend
-        env:
-          # Set in GitHub → Settings → Secrets and variables → Actions:
-          # EXPO_PUBLIC_API_URL = https://YOUR-APP-NAME.azurewebsites.net/api/v1
-          # If unset, frontend falls back to the URL in src/config/env.js (must match your live API).
-          EXPO_PUBLIC_API_URL: ${{ secrets.EXPO_PUBLIC_API_URL }}
         run: npx expo export --platform web
-
-      - name: Inject web API URL (Azure Static Web Apps)
-        env:
-          EXPO_PUBLIC_API_URL: ${{ secrets.EXPO_PUBLIC_API_URL }}
-        run: |
-          node -e 'const fs=require("fs");const path=require("path");const u=(process.env.EXPO_PUBLIC_API_URL||"").trim().replace(/\/+$/,"");const d=path.join("frontend","dist");const i=path.join(d,"index.html");if(!fs.existsSync(i)){console.error("inject: missing frontend/dist/index.html");process.exit(1);}if(!u){console.warn("inject: EXPO_PUBLIC_API_URL empty; skip");process.exit(0);}const r=path.join(d,"runtime-config.js");fs.writeFileSync(r,"window.__NESTVET_API_BASE__="+JSON.stringify(u)+"\n");let h=fs.readFileSync(i,"utf8");if(h.indexOf("runtime-config.js")<0){h=h.replace("</head>","  <script src=\"/runtime-config.js\"></script>\n</head>");fs.writeFileSync(i,h);}console.log("inject: ok");'
 
       - name: Deploy to Azure Static Web Apps (SWA CLI)
         working-directory: ./frontend

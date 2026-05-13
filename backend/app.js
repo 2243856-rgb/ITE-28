@@ -10,16 +10,10 @@ const homeVisitsRoutes = require("./src/modules/home-visits/home-visits.routes")
 const medicalRecordsRoutes = require("./src/modules/medical-records/medical-records.routes");
 const { ok } = require("./src/utils/response");
 const { notFound, errorHandler } = require("./src/middlewares/error-handler");
-const { getPool } = require("./src/db/pool");
 
 const app = express();
 
-app.use(
-  helmet({
-    // Allow browsers on Azure Static Web Apps to read JSON from this API (different origin).
-    crossOriginResourcePolicy: { policy: "cross-origin" },
-  })
-);
+app.use(helmet());
 app.use(
   cors({
     origin: true,
@@ -46,30 +40,6 @@ app.get("/health", (req, res) => {
     service: "vet-booking-backend",
     status: "ok"
   });
-});
-
-/** Proves SQL_CONNECTION_STRING works; APIs still use in-memory store until you add queries. */
-app.get("/api/v1/health/sql", async (req, res) => {
-  try {
-    const pool = await getPool();
-    if (!pool) {
-      return ok(res, {
-        connected: false,
-        mode: "in-memory",
-        hint: "Set SQL_CONNECTION_STRING to use Azure SQL."
-      });
-    }
-    const result = await pool.request().query("SELECT 1 AS ok");
-    return ok(res, { connected: true, sample: result.recordset[0] });
-  } catch (err) {
-    return res.status(503).json({
-      data: null,
-      error: {
-        code: "SQL_CONNECTION_FAILED",
-        message: err.message || "Could not reach Azure SQL."
-      }
-    });
-  }
 });
 
 app.get("/api", (req, res) => {

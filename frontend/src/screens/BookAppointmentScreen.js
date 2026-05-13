@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
 import {
     SafeAreaView,
     View,
@@ -47,22 +47,6 @@ function petPickLabel(p) {
     return `${p.petName} (${p.species})${breed}`;
 }
 
-/** react-native-web's Alert.alert is a no-op; use window.alert on web. */
-function showFeedback(title, message) {
-    if (Platform.OS === "web") {
-        const body = message ? `${title}\n\n${message}` : title;
-        if (typeof globalThis.alert === "function") {
-            globalThis.alert(body);
-        }
-        return;
-    }
-    if (message) {
-        Alert.alert(title, message);
-    } else {
-        Alert.alert(title);
-    }
-}
-
 export default function BookAppointmentScreen() {
     const navigation = useNavigation();
     const [pets, setPets] = useState([]);
@@ -79,35 +63,22 @@ export default function BookAppointmentScreen() {
     const showPetPicker = Boolean(animalType && matchingPets.length >= 1);
     const petOptions = matchingPets.map(petPickLabel);
 
-    useEffect(() => {
-        if (!animalType || pets.length === 0) return;
-        const matches = resolvePetsForAnimalType(pets, animalType);
-        if (matches.length === 1) {
-            setPetId(matches[0].petId);
-            setPetPickerValue(petPickLabel(matches[0]));
-            return;
-        }
-        if (matches.length > 1) {
-            setPetId((prev) =>
-                matches.some((m) => m.petId === prev) ? prev : ""
-            );
-            setPetPickerValue((prev) =>
-                matches.some((m) => petPickLabel(m) === prev) ? prev : ""
-            );
-            return;
-        }
-        setPetId("");
-        setPetPickerValue("");
-    }, [pets, animalType]);
-
     useFocusEffect(
         useCallback(() => {
             (async () => {
                 const res = await fetchPets();
                 if (!res.ok) return;
                 setPets(res.items);
+                const matches = resolvePetsForAnimalType(
+                    res.items,
+                    animalType
+                );
+                if (animalType && matches.length === 1) {
+                    setPetId(matches[0].petId);
+                    setPetPickerValue(petPickLabel(matches[0]));
+                }
             })();
-        }, [])
+        }, [animalType])
     );
 
     const onPickAnimalType = (label) => {
@@ -141,90 +112,70 @@ export default function BookAppointmentScreen() {
     };
 
     const submit = async () => {
-        try {
-            if (!petId) {
-                if (!animalType) {
-                    showFeedback(
-                        "Animal type",
-                        "Choose the type of animal for this visit."
-                    );
-                    return;
-                }
-                if (pets.length === 0) {
-                    showFeedback(
-                        "No pets on file",
-                        "Add a pet from the Pets tab first, then return here."
-                    );
-                    return;
-                }
-                if (matchingPets.length === 0) {
-                    showFeedback(
-                        "No matching pet",
-                        `You have no pets saved as “${animalType}”. Add one under Pets using that animal type, or choose “Other” to pick from all your pets.`
-                    );
-                    return;
-                }
-                showFeedback(
-                    "Choose your pet",
-                    "Open Select pet above and choose which pet this visit is for."
+        if (!petId) {
+            if (!animalType) {
+                Alert.alert(
+                    "Animal type",
+                    "Choose the type of animal for this visit."
                 );
                 return;
             }
-            if (!startDate.trim() || !startTime.trim() || !endTime.trim()) {
-                showFeedback(
-                    "Date & time",
-                    "Use date YYYY-MM-DD and 24h times HH:MM for start and end."
+            if (pets.length === 0) {
+                Alert.alert(
+                    "No pets on file",
+                    "Add a pet from the Pets tab first, then return here."
                 );
                 return;
             }
-
-            const startIso = new Date(
-                `${startDate.trim()}T${startTime.trim()}:00`
+            if (matchingPets.length === 0) {
+                Alert.alert(
+                    "No matching pet",
+                    `You have no pets saved as “${animalType}”. Add one under Pets using that animal type, or choose “Other” to pick from all your pets.`
+                );
+                return;
+            }
+            Alert.alert(
+                "Choose your pet",
+                "Select which pet this appointment is for."
             );
-            const endIso = new Date(`${startDate.trim()}T${endTime.trim()}:00`);
-            if (
-                Number.isNaN(startIso.getTime()) ||
-                Number.isNaN(endIso.getTime())
-            ) {
-                showFeedback(
-                    "Invalid date/time",
-                    "Check the format and try again."
-                );
-                return;
-            }
-            if (endIso <= startIso) {
-                showFeedback(
-                    "Invalid range",
-                    "End time must be after start time."
-                );
-                return;
-            }
-
-            const res = await createAppointmentRequest({
-                petId,
-                clinicId: DEFAULT_CLINIC_ID,
-                appointmentType: "CLINIC_VISIT",
-                scheduledStart: startIso.toISOString(),
-                scheduledEnd: endIso.toISOString(),
-                reason: reason.trim() || null,
-            });
-
-            if (!res.ok) {
-                showFeedback("Booking failed", res.message);
-                return;
-            }
-
-            confirmBody(
-                "Booked",
-                "Your appointment request was saved.",
-                () => navigation.goBack()
-            );
-        } catch (e) {
-            showFeedback(
-                "Booking error",
-                e?.message || "Something went wrong. Try again."
-            );
+            return;
         }
+        if (!startDate.trim() || !startTime.trim() || !endTime.trim()) {
+            Alert.alert(
+                "Date & time",
+                "Use date YYYY-MM-DD and 24h times HH:MM for start and end."
+            );
+            return;
+        }
+
+        const startIso = new Date(`${startDate.trim()}T${startTime.trim()}:00`);
+        const endIso = new Date(`${startDate.trim()}T${endTime.trim()}:00`);
+        if (Number.isNaN(startIso.getTime()) || Number.isNaN(endIso.getTime())) {
+            Alert.alert("Invalid date/time", "Check the format and try again.");
+            return;
+        }
+        if (endIso <= startIso) {
+            Alert.alert("Invalid range", "End time must be after start time.");
+            return;
+        }
+
+        const res = await createAppointmentRequest({
+            petId,
+            clinicId: DEFAULT_CLINIC_ID,
+            appointmentType: "CLINIC_VISIT",
+            scheduledStart: startIso.toISOString(),
+            scheduledEnd: endIso.toISOString(),
+            reason: reason.trim() || null,
+        });
+
+        if (!res.ok) {
+            Alert.alert("Booking failed", res.message);
+            return;
+        }
+
+        confirmBody("Booked", "Your appointment request was saved.", () =>
+            navigation.goBack()
+        );
     };
 
     return (
@@ -311,12 +262,7 @@ export default function BookAppointmentScreen() {
                     />
 
                     <View style={styles.spacer} />
-                    <CustomButton
-                        title="CONFIRM BOOKING"
-                        onPress={() => {
-                            void submit();
-                        }}
-                    />
+                    <CustomButton title="CONFIRM BOOKING" onPress={submit} />
                 </View>
             </ScrollView>
         </SafeAreaView>

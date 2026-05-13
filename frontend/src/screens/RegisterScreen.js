@@ -4,9 +4,8 @@ import {
     View,
     Text,
     ScrollView,
-    StyleSheet,
-    Platform,
     Alert,
+    StyleSheet,
 } from "react-native";
 
 import InputField from "../components/InputField";
@@ -14,22 +13,6 @@ import CustomButton from "../components/CustomButton";
 import globalStyles from "../theme/globalStyles";
 import colors from "../theme/colors/theme";
 import { useAuth } from "../context/AuthContext";
-
-/** react-native-web's Alert.alert is a no-op; use window.alert on web. */
-function alertUser(title, message) {
-    if (Platform.OS === "web") {
-        const body = message ? `${title}\n\n${message}` : title;
-        if (typeof globalThis.alert === "function") {
-            globalThis.alert(body);
-        }
-        return;
-    }
-    if (message) {
-        Alert.alert(title, message);
-    } else {
-        Alert.alert(title);
-    }
-}
 
 export default function RegisterScreen({ navigation }) {
     const { register, error: authError, clearError } = useAuth();
@@ -46,14 +29,11 @@ export default function RegisterScreen({ navigation }) {
         const name = fullName.trim();
         const em = email.trim().toLowerCase();
         if (!name || !em || !password) {
-            alertUser(
-                "Create account",
-                "Name, email, and password are required."
-            );
+            Alert.alert("Create account", "Name, email, and password are required.");
             return;
         }
         if (password.length < 8) {
-            alertUser(
+            Alert.alert(
                 "Create account",
                 "Password must be at least 8 characters (server rule)."
             );
@@ -66,11 +46,7 @@ export default function RegisterScreen({ navigation }) {
             phoneNumber: phone.trim() || undefined,
         });
         if (!res.ok) {
-            const title =
-                res.phase === "login"
-                    ? "Sign-in after register"
-                    : "Registration failed";
-            alertUser(title, res.message || "Try again.");
+            Alert.alert("Registration failed", res.message || "Try again.");
         }
     };
 
@@ -124,12 +100,7 @@ export default function RegisterScreen({ navigation }) {
                         />
                     </View>
 
-                    <CustomButton
-                        title="CREATE ACCOUNT"
-                        onPress={() => {
-                            void submit();
-                        }}
-                    />
+                    <CustomButton title="CREATE ACCOUNT" onPress={submit} />
                     <CustomButton
                         title="BACK TO SIGN IN"
                         variant="secondary"

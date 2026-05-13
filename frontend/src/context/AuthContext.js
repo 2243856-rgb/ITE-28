@@ -76,19 +76,9 @@ export function AuthProvider({ children }) {
             });
             if (!reg.ok) {
                 setError(reg.message);
-                return {
-                    ok: false,
-                    phase: "register",
-                    message: reg.message,
-                };
+                return { ok: false, message: reg.message };
             }
-            const loginRes = await login(email, password);
-            if (!loginRes.ok) {
-                const msg = `Account was created, but automatic sign-in failed: ${loginRes.message}. Try “Back to sign in” and log in manually.`;
-                setError(msg);
-                return { ok: false, phase: "login", message: msg };
-            }
-            return { ok: true };
+            return login(email, password);
         },
         [login]
     );
