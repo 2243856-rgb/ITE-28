@@ -5,25 +5,25 @@ import {
     Text,
     StyleSheet,
     TouchableOpacity,
-    Alert,
 } from "react-native";
 
 import globalStyles from "../theme/globalStyles";
 import colors from "../theme/colors/theme";
 import { useAuth } from "../context/AuthContext";
+import { confirmDialog } from "../utils/confirmDialog";
 
 export default function UserProfileScreen() {
     const { user, logout } = useAuth();
 
     const onLogout = () => {
-        Alert.alert("Sign out", "Are you sure you want to sign out?", [
-            { text: "Cancel", style: "cancel" },
-            {
-                text: "Sign out",
-                style: "destructive",
-                onPress: () => logout(),
+        confirmDialog("Sign out", "Are you sure you want to sign out?", {
+            cancelText: "Cancel",
+            confirmText: "Sign out",
+            destructive: true,
+            onConfirm: () => {
+                void logout();
             },
-        ]);
+        });
     };
 
     return (

@@ -5,25 +5,25 @@ import {
     Text,
     StyleSheet,
     TouchableOpacity,
-    Alert,
 } from "react-native";
 
 import globalStyles from "../theme/globalStyles";
 import colors from "../theme/colors/theme";
 import { useAuth } from "../context/AuthContext";
+import { confirmDialog } from "../utils/confirmDialog";
 
 export default function AdminProfileScreen() {
     const { user, logout } = useAuth();
 
     const onSignOut = () => {
-        Alert.alert("Sign out", "Sign out of the admin console?", [
-            { text: "Cancel", style: "cancel" },
-            {
-                text: "Sign out",
-                style: "destructive",
-                onPress: () => logout(),
+        confirmDialog("Sign out", "Sign out of the admin console?", {
+            cancelText: "Cancel",
+            confirmText: "Sign out",
+            destructive: true,
+            onConfirm: () => {
+                void logout();
             },
-        ]);
+        });
     };
 
     return (
