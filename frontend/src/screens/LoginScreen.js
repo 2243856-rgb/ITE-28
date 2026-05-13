@@ -6,7 +6,6 @@ import {
     Text,
     StyleSheet,
     Alert,
-    Image,
     ScrollView,
 } from "react-native";
 
@@ -19,6 +18,23 @@ import globalStyles from "../theme/globalStyles";
 import colors from "../theme/colors/theme";
 
 import { loginUser } from "../services/auth.service";
+
+/** Inline mark — no bundled PNG required (CI-safe). Drop `assets/images/nestvet-logo.png` into the repo and swap in `<Image source={require(...)} />` if you want the full artwork. */
+function NestVetBrandMark() {
+    return (
+        <View style={styles.brandBlock} accessibilityRole="header">
+            <View style={styles.logoRing}>
+                <View style={styles.logoNest}>
+                    <View style={styles.logoPet} />
+                </View>
+            </View>
+            <Text style={styles.wordmark}>NestVet</Text>
+            <Text style={styles.tagline}>
+                the future of vet care, delivered to you
+            </Text>
+        </View>
+    );
+}
 
 export default function LoginScreen({ navigation }) {
     const [email, setEmail] = useState("");
@@ -45,17 +61,7 @@ export default function LoginScreen({ navigation }) {
                 contentContainerStyle={styles.scrollContent}
             >
                 <View style={globalStyles.container}>
-                    <View style={styles.brandBlock}>
-                        <Image
-                            source={require("../../assets/images/nestvet-logo.png")}
-                            style={styles.logo}
-                            resizeMode="contain"
-                            accessibilityLabel="NestVet logo"
-                        />
-                        <Text style={styles.tagline}>
-                            the future of vet care, delivered to you
-                        </Text>
-                    </View>
+                    <NestVetBrandMark />
 
                     <View style={globalStyles.section}>
                         <InputField
@@ -101,20 +107,48 @@ const styles = StyleSheet.create({
     brandBlock: {
         alignItems: "center",
         marginBottom: 8,
-        marginTop: 4,
+        marginTop: 8,
     },
-    logo: {
-        width: 260,
-        height: 200,
-        maxWidth: "100%",
+    logoRing: {
+        width: 112,
+        height: 112,
+        borderRadius: 56,
+        borderWidth: 2,
+        borderColor: colors.ink,
+        backgroundColor: colors.surfaceElevated,
+        alignItems: "center",
+        justifyContent: "center",
+    },
+    logoNest: {
+        width: 72,
+        height: 48,
+        borderRadius: 20,
+        backgroundColor: colors.nestBrown,
+        opacity: 0.92,
+        alignItems: "center",
+        justifyContent: "flex-end",
+        paddingBottom: 6,
+    },
+    logoPet: {
+        width: 40,
+        height: 28,
+        borderRadius: 14,
+        backgroundColor: colors.primary,
+    },
+    wordmark: {
+        marginTop: 16,
+        fontSize: 34,
+        fontWeight: "900",
+        color: colors.primary,
+        letterSpacing: -0.5,
     },
     tagline: {
-        marginTop: 12,
+        marginTop: 10,
         textAlign: "center",
         fontSize: 15,
         fontWeight: "600",
         color: colors.textPrimary,
-        letterSpacing: 0.2,
+        letterSpacing: 0.15,
         lineHeight: 22,
         paddingHorizontal: 12,
     },
