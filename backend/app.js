@@ -20,13 +20,10 @@ app.use(
     crossOriginResourcePolicy: { policy: "cross-origin" },
   })
 );
-// Bearer tokens only (no cookies). credentials:false avoids CORS edge cases with SWA (*.azurestaticapps.net).
 app.use(
   cors({
     origin: true,
-    credentials: false,
-    methods: ["GET", "HEAD", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization", "Accept"]
+    credentials: true
   })
 );
 app.use(express.json());
@@ -45,14 +42,6 @@ app.get("/", (req, res) => {
 });
 
 app.get("/health", (req, res) => {
-  return res.status(200).json({
-    service: "vet-booking-backend",
-    status: "ok"
-  });
-});
-
-/** Same as /health but under the API prefix (matches EXPO_PUBLIC_API_URL base in the browser). */
-app.get("/api/v1/health", (req, res) => {
   return res.status(200).json({
     service: "vet-booking-backend",
     status: "ok"

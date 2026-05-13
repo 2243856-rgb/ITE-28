@@ -1,5 +1,5 @@
 import axios from "axios";
-import { API_BASE_URL, normalizeNestvetApiBase } from "../config/env";
+import { API_BASE_URL } from "../config/env";
 import { getMemoryToken } from "./authSession";
 
 const api = axios.create({
@@ -21,7 +21,7 @@ api.interceptors.request.use((config) => {
             typeof g.__NESTVET_API_BASE__ === "string" &&
             g.__NESTVET_API_BASE__.trim();
         if (runtime) {
-            config.baseURL = normalizeNestvetApiBase(runtime);
+            config.baseURL = runtime.replace(/\/+$/, "");
         }
     } catch {
         // ignore
@@ -59,19 +59,7 @@ export function getApiErrorMessage(error, fallback = "Request failed") {
         error?.code === "ERR_NETWORK" ||
         error?.message === "Network Error"
     ) {
-        const base = error?.config?.baseURL || API_BASE_URL;
-        const path = error?.config?.url || "";
-        const tried =
-            base && path
-                ? `${String(base).replace(/\/+$/, "")}/${String(path).replace(/^\//, "")}`
-                : base || "(unknown URL)";
-        return (
-            "Cannot reach the API (browser blocked the response or the server did not answer). " +
-            `Attempted: ${tried}. ` +
-            "Set GitHub secret EXPO_PUBLIC_API_URL to your App Service URL (with or without `/api/v1`; it is added if missing), redeploy, open `/runtime-config.js` on the site to verify, " +
-            "and confirm the backend is running (Azure portal → Log stream). " +
-            "If the URL is correct, check CORS and App Service networking."
-        );
+        return "Cannot reach the API. Set GitHub secret EXPO_PUBLIC_API_URL to https://YOUR-API.azurewebsites.net/api/v1, redeploy, and confirm the backend is running (CORS / firewall).";
     }
 
     return error?.message || fallback;
