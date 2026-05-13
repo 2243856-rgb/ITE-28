@@ -4,7 +4,6 @@ import {
     View,
     Text,
     ScrollView,
-    Alert,
     StyleSheet,
 } from "react-native";
 
@@ -13,6 +12,7 @@ import CustomButton from "../components/CustomButton";
 import globalStyles from "../theme/globalStyles";
 import colors from "../theme/colors/theme";
 import { useAuth } from "../context/AuthContext";
+import { showAlert } from "../utils/showAlert";
 
 export default function RegisterScreen({ navigation }) {
     const { register, error: authError, clearError } = useAuth();
@@ -29,11 +29,14 @@ export default function RegisterScreen({ navigation }) {
         const name = fullName.trim();
         const em = email.trim().toLowerCase();
         if (!name || !em || !password) {
-            Alert.alert("Create account", "Name, email, and password are required.");
+            showAlert(
+                "Create account",
+                "Name, email, and password are required."
+            );
             return;
         }
         if (password.length < 8) {
-            Alert.alert(
+            showAlert(
                 "Create account",
                 "Password must be at least 8 characters (server rule)."
             );
@@ -46,7 +49,11 @@ export default function RegisterScreen({ navigation }) {
             phoneNumber: phone.trim() || undefined,
         });
         if (!res.ok) {
-            Alert.alert("Registration failed", res.message || "Try again.");
+            const title =
+                res.phase === "login"
+                    ? "Sign-in after register"
+                    : "Registration failed";
+            showAlert(title, res.message || "Try again.");
         }
     };
 
@@ -100,7 +107,12 @@ export default function RegisterScreen({ navigation }) {
                         />
                     </View>
 
-                    <CustomButton title="CREATE ACCOUNT" onPress={submit} />
+                    <CustomButton
+                        title="CREATE ACCOUNT"
+                        onPress={() => {
+                            void submit();
+                        }}
+                    />
                     <CustomButton
                         title="BACK TO SIGN IN"
                         variant="secondary"

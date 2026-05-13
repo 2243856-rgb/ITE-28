@@ -29,7 +29,25 @@ api.interceptors.response.use(
 );
 
 export function getApiErrorMessage(error, fallback = "Request failed") {
-    return error?.response?.data?.error?.message || fallback;
+    const apiMsg = error?.response?.data?.error?.message;
+    if (apiMsg) return apiMsg;
+
+    const status = error?.response?.status;
+    if (status) {
+        const body = error?.response?.data;
+        const code = body?.error?.code;
+        const extra = code ? ` (${code})` : "";
+        return `Request failed (${status})${extra}. Check the API URL and server logs.`;
+    }
+
+    if (
+        error?.code === "ERR_NETWORK" ||
+        error?.message === "Network Error"
+    ) {
+        return "Cannot reach the API. Check EXPO_PUBLIC_API_URL, CORS, and that the backend is running.";
+    }
+
+    return error?.message || fallback;
 }
 
 export default api;

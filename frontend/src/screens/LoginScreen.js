@@ -5,7 +5,6 @@ import {
     View,
     Text,
     StyleSheet,
-    Alert,
     ScrollView,
 } from "react-native";
 
@@ -18,6 +17,7 @@ import globalStyles from "../theme/globalStyles";
 import colors from "../theme/colors/theme";
 
 import { useAuth } from "../context/AuthContext";
+import { showAlert } from "../utils/showAlert";
 
 function NestVetBrandMark() {
     return (
@@ -43,12 +43,12 @@ export default function LoginScreen({ navigation }) {
     const handleLogin = async () => {
         const trimmedEmail = email.trim().toLowerCase();
         if (!trimmedEmail || !password) {
-            Alert.alert("Sign in", "Enter email and password.");
+            showAlert("Sign in", "Enter email and password.");
             return;
         }
         const res = await login(trimmedEmail, password);
         if (!res.ok) {
-            Alert.alert("Sign in failed", res.message || "Try again.");
+            showAlert("Sign in failed", res.message || "Try again.");
         }
     };
 
