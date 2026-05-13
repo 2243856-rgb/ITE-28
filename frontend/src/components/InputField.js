@@ -1,20 +1,21 @@
-import React from 'react';
-import { View, Text, TextInput, StyleSheet } from 'react-native';
+import React from "react";
+import { View, Text, TextInput, StyleSheet } from "react-native";
 
-export default function InputField({ label, placeholder, value, onChangeText, secureTextEntry }) {
-    return (
-        <View style={styles.container}>
-            <Text style={styles.label}>{label} :</Text>
-            <TextInput
-                style={styles.input}
-                placeholder={placeholder}
-                placeholderTextColor="#555555"
-                value={value}
-                onChangeText={onChangeText}
-                secureTextEntry={secureTextEntry}
-            />
-        </View>
-    );
+export default function InputField({ label, placeholder, value, onChangeText, secureTextEntry, ...rest }) {
+  return (
+    <View style={styles.container}>
+      <Text style={styles.label}>{label} :</Text>
+      <TextInput
+        style={styles.input}
+        placeholder={placeholder}
+        placeholderTextColor="#555555"
+        value={value}
+        onChangeText={onChangeText}
+        secureTextEntry={secureTextEntry}
+        {...rest}
+      />
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
