@@ -17,6 +17,9 @@ import CustomButton
 import globalStyles
     from "../theme/globalStyles";
 
+import colors
+    from "../theme/colors/theme";
+
 import {
     loginUser,
 } from "../services/auth.service";

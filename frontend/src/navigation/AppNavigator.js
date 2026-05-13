@@ -25,6 +25,12 @@ import BookAppointmentScreen
 import PetsScreen
     from "../screens/PetProfileScreen";
 
+import OnlineStatusScreen
+    from "../screens/OnlineStatusScreen";
+
+import colors
+    from "../theme/colors/theme";
+
 const Stack =
     createNativeStackNavigator();
 
