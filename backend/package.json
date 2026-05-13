@@ -3,10 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "description": "Backend API starter for cloud veterinary booking system",
-  "main": "src/index.js",
+  "main": "index.js",
   "scripts": {
-    "dev": "nodemon src/index.js",
-    "start": "node src/index.js"
+    "dev": "nodemon index.js",
+    "start": "node index.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",

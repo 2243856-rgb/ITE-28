@@ -1,9 +1,8 @@
 const dotenv = require("dotenv");
 dotenv.config();
 
-const app = require("./app"); // This imports the app.js code you just sent
+const app = require("./app");
 
-// Azure provides the port via process.env.PORT
 const port = process.env.PORT || 4001;
 
 app.listen(port, () => {
