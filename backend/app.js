@@ -14,7 +14,12 @@ const { getPool } = require("./src/db/pool");
 
 const app = express();
 
-app.use(helmet());
+app.use(
+  helmet({
+    // Allow browsers on Azure Static Web Apps to read JSON from this API (different origin).
+    crossOriginResourcePolicy: { policy: "cross-origin" },
+  })
+);
 app.use(
   cors({
     origin: true,

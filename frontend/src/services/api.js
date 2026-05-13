@@ -7,7 +7,9 @@ const api = axios.create({
     headers: {
         "Content-Type": "application/json",
     },
-    withCredentials: true,
+    // Do not use credentials for cross-origin calls to Azure App Service; it breaks
+    // CORS from Static Web Apps (*.azurestaticapps.net). Auth uses Bearer tokens only.
+    withCredentials: false,
 });
 
 api.interceptors.request.use((config) => {
