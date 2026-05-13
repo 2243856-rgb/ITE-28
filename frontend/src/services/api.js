@@ -12,7 +12,7 @@ const api = axios.create({
     withCredentials: false,
 });
 
-/** Set by scripts/inject-web-api-url.js on deployed web (GitHub secret EXPO_PUBLIC_API_URL). */
+/** Set by CI inject step (runtime-config.js) on deployed web; secret EXPO_PUBLIC_API_URL. */
 api.interceptors.request.use((config) => {
     try {
         const g = typeof globalThis !== "undefined" ? globalThis : undefined;
