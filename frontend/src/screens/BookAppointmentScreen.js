@@ -8,29 +8,31 @@ import {
     StyleSheet,
 } from "react-native";
 
-import InputField   from "../components/InputField";
+import InputField from "../components/InputField";
 import CustomButton from "../components/CustomButton";
-
-// NOTE: We removed DropdownPicker and theme imports because those files don't exist yet.
+import colors from "../theme/colors/theme";
 
 export default function BookAppointmentScreen() {
-    const [petName,  setPetName]  = useState("");
-    const [date,      setDate]      = useState("");
-    const [service,  setService]  = useState("");
+    const [petName, setPetName] = useState("");
+    const [date, setDate] = useState("");
+    const [service, setService] = useState("");
 
     function handleConfirm() {
-        const trimmedPet     = petName.trim();
-        const trimmedDate    = date.trim();
+        const trimmedPet = petName.trim();
+        const trimmedDate = date.trim();
         const selectedService = service.trim();
 
         if (!trimmedPet || !trimmedDate || !selectedService) {
-            Alert.alert("MISSING INFO", "Please fill in all fields before confirming.");
+            Alert.alert(
+                "Missing information",
+                "Please fill in all fields before confirming."
+            );
             return;
         }
 
         Alert.alert(
-            "APPOINTMENT BOOKED",
-            `Appointment for ${trimmedPet.toUpperCase()} on ${trimmedDate.toUpperCase()} (${selectedService.toUpperCase()}) has been confirmed.`,
+            "Appointment booked",
+            `Appointment for ${trimmedPet} on ${trimmedDate} (${selectedService}) is confirmed.`,
             [
                 {
                     text: "OK",
@@ -47,7 +49,6 @@ export default function BookAppointmentScreen() {
     return (
         <SafeAreaView style={styles.screen}>
             <View style={styles.topAccent} />
-
             <ScrollView
                 showsVerticalScrollIndicator={false}
                 keyboardShouldPersistTaps="always"
@@ -55,38 +56,33 @@ export default function BookAppointmentScreen() {
             >
                 <View style={styles.container}>
                     <View style={styles.headerContainer}>
-                        <Text style={styles.title}>BOOK</Text>
-                        <Text style={styles.subtitle}>APPOINTMENT FORM</Text>
+                        <Text style={styles.title}>Book</Text>
+                        <Text style={styles.subtitle}>New appointment</Text>
                     </View>
 
                     <View style={styles.formCard}>
                         <InputField
                             label="PET NAME"
-                            placeholder="e.g. MILO"
+                            placeholder="e.g. Milo"
                             value={petName}
                             onChangeText={setPetName}
                             autoCapitalize="characters"
                         />
-
                         <InputField
                             label="DATE"
-                            placeholder="e.g. MAY 25, 2026"
+                            placeholder="e.g. May 25, 2026"
                             value={date}
                             onChangeText={setDate}
                             autoCapitalize="characters"
                         />
-
-                        {/* Temporarily using InputField instead of DropdownPicker */}
                         <InputField
                             label="SERVICE"
-                            placeholder="e.g. VACCINATION"
+                            placeholder="e.g. Vaccination"
                             value={service}
                             onChangeText={setService}
                             autoCapitalize="characters"
                         />
-
                         <View style={styles.spacer} />
-
                         <CustomButton
                             title="CONFIRM BOOKING"
                             onPress={handleConfirm}
@@ -101,31 +97,36 @@ export default function BookAppointmentScreen() {
 const styles = StyleSheet.create({
     screen: {
         flex: 1,
-        backgroundColor: "#FFFFFF",
+        backgroundColor: colors.background,
     },
     topAccent: {
-        height: 5,
-        backgroundColor: "#007BFF",
+        height: 4,
+        backgroundColor: colors.gold,
     },
     container: {
-        padding: 20,
+        paddingHorizontal: 22,
+        paddingTop: 8,
     },
     headerContainer: {
         marginBottom: 20,
     },
     title: {
-        fontSize: 32,
-        fontWeight: "bold",
-        color: "#000000",
+        fontSize: 28,
+        fontWeight: "800",
+        color: colors.textPrimary,
+        letterSpacing: 2,
     },
     subtitle: {
-        fontSize: 18,
-        color: "#666666",
+        fontSize: 15,
+        fontWeight: "600",
+        color: colors.textSecondary,
+        letterSpacing: 1,
+        marginTop: 6,
     },
     formCard: {
         marginTop: 4,
     },
     spacer: {
-        height: 20,
+        height: 12,
     },
 });

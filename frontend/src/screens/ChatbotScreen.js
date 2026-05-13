@@ -6,133 +6,194 @@ import {
     FlatList,
     StyleSheet,
     SafeAreaView,
-    TouchableOpacity
+    TouchableOpacity,
+    KeyboardAvoidingView,
+    Platform,
 } from "react-native";
+import colors from "../theme/colors/theme";
 
-// Removed globalStyles and colors imports as they cause resolve errors
 export default function ChatbotScreen() {
     const [messages, setMessages] = useState([
-        { id: "1", text: "Hello! How can I help you and your pet today?", sender: "bot" }
+        {
+            id: "1",
+            text: "Hello — I can help with scheduling, pet care tips, and clinic questions.",
+            sender: "bot",
+        },
     ]);
     const [inputText, setInputText] = useState("");
 
     const handleSend = () => {
         if (inputText.trim().length === 0) return;
 
-        const userMessage = { id: Date.now().toString(), text: inputText, sender: "user" };
+        const userMessage = {
+            id: Date.now().toString(),
+            text: inputText,
+            sender: "user",
+        };
         setMessages((prev) => [...prev, userMessage]);
         setInputText("");
 
         setTimeout(() => {
             const botResponse = {
                 id: (Date.now() + 1).toString(),
-                text: "I'm here to help with your pet questions!",
-                sender: "bot"
+                text: "Thanks for your message. A staff member can assist with specifics in the clinic portal.",
+                sender: "bot",
             };
             setMessages((prev) => [...prev, botResponse]);
-        }, 1000);
+        }, 800);
     };
 
     return (
         <SafeAreaView style={styles.screen}>
-            <View style={styles.header}>
-                <Text style={styles.headerTitle}>PET ASSISTANT</Text>
-            </View>
+            <KeyboardAvoidingView
+                style={styles.flex}
+                behavior={Platform.OS === "ios" ? "padding" : undefined}
+                keyboardVerticalOffset={72}
+            >
+                <View style={styles.header}>
+                    <Text style={styles.headerKicker}>ASSISTANT</Text>
+                    <Text style={styles.headerTitle}>Pet care chat</Text>
+                </View>
 
-            <FlatList
-                data={messages}
-                keyExtractor={(item) => item.id}
-                renderItem={({ item }) => (
-                    <View style={[
-                        styles.messageBubble,
-                        item.sender === "user" ? styles.userBubble : styles.botBubble
-                    ]}>
-                        <Text style={item.sender === "user" ? styles.userText : styles.botText}>
-                            {item.text}
-                        </Text>
-                    </View>
-                )}
-                contentContainerStyle={styles.chatContainer}
-            />
-
-            <View style={styles.inputContainer}>
-                <TextInput
-                    style={styles.input}
-                    placeholder="Ask something..."
-                    value={inputText}
-                    onChangeText={setInputText}
+                <FlatList
+                    data={messages}
+                    keyExtractor={(item) => item.id}
+                    renderItem={({ item }) => (
+                        <View
+                            style={[
+                                styles.messageBubble,
+                                item.sender === "user"
+                                    ? styles.userBubble
+                                    : styles.botBubble,
+                            ]}
+                        >
+                            <Text
+                                style={
+                                    item.sender === "user"
+                                        ? styles.userText
+                                        : styles.botText
+                                }
+                            >
+                                {item.text}
+                            </Text>
+                        </View>
+                    )}
+                    contentContainerStyle={styles.chatContainer}
                 />
-                <TouchableOpacity style={styles.sendButton} onPress={handleSend}>
-                    <Text style={styles.sendButtonText}>SEND</Text>
-                </TouchableOpacity>
-            </View>
+
+                <View style={styles.inputContainer}>
+                    <TextInput
+                        style={styles.input}
+                        placeholder="Type a message…"
+                        placeholderTextColor={colors.textMuted}
+                        value={inputText}
+                        onChangeText={setInputText}
+                    />
+                    <TouchableOpacity
+                        style={styles.sendButton}
+                        onPress={handleSend}
+                        activeOpacity={0.88}
+                    >
+                        <Text style={styles.sendButtonText}>SEND</Text>
+                    </TouchableOpacity>
+                </View>
+            </KeyboardAvoidingView>
         </SafeAreaView>
     );
 }
 
 const styles = StyleSheet.create({
+    flex: { flex: 1 },
     screen: {
         flex: 1,
-        backgroundColor: "#FFFFFF",
+        backgroundColor: colors.background,
     },
     header: {
-        padding: 20,
+        paddingHorizontal: 22,
+        paddingVertical: 18,
         borderBottomWidth: 1,
-        borderBottomColor: "#EEEEEE",
-        alignItems: "center",
+        borderBottomColor: colors.border,
+        backgroundColor: colors.surfaceElevated,
+    },
+    headerKicker: {
+        fontSize: 11,
+        fontWeight: "800",
+        color: colors.gold,
+        letterSpacing: 2,
     },
     headerTitle: {
-        fontSize: 18,
-        fontWeight: "bold",
-        color: "#007BFF",
+        fontSize: 20,
+        fontWeight: "800",
+        color: colors.textPrimary,
+        marginTop: 4,
+        letterSpacing: 0.5,
     },
     chatContainer: {
-        padding: 15,
+        padding: 18,
+        paddingBottom: 8,
     },
     messageBubble: {
-        padding: 12,
-        borderRadius: 15,
+        paddingVertical: 12,
+        paddingHorizontal: 16,
+        borderRadius: 16,
         marginBottom: 10,
-        maxWidth: "80%",
+        maxWidth: "85%",
     },
     userBubble: {
         alignSelf: "flex-end",
-        backgroundColor: "#007BFF",
+        backgroundColor: colors.red,
+        borderBottomRightRadius: 4,
     },
     botBubble: {
         alignSelf: "flex-start",
-        backgroundColor: "#F0F0F0",
+        backgroundColor: colors.surfaceElevated,
+        borderWidth: 1,
+        borderColor: colors.border,
+        borderBottomLeftRadius: 4,
     },
     userText: {
-        color: "#FFFFFF",
+        color: colors.white,
+        fontSize: 15,
+        lineHeight: 22,
     },
     botText: {
-        color: "#333333",
+        color: colors.textPrimary,
+        fontSize: 15,
+        lineHeight: 22,
     },
     inputContainer: {
         flexDirection: "row",
-        padding: 15,
+        paddingHorizontal: 16,
+        paddingVertical: 12,
         borderTopWidth: 1,
-        borderTopColor: "#EEEEEE",
+        borderTopColor: colors.border,
         alignItems: "center",
+        backgroundColor: colors.surfaceElevated,
     },
     input: {
         flex: 1,
-        height: 40,
+        minHeight: 44,
         borderWidth: 1,
-        borderColor: "#CCCCCC",
-        borderRadius: 20,
-        paddingHorizontal: 15,
+        borderColor: colors.border,
+        borderRadius: 12,
+        paddingHorizontal: 16,
         marginRight: 10,
+        fontSize: 15,
+        color: colors.textPrimary,
+        backgroundColor: colors.surface,
     },
     sendButton: {
-        backgroundColor: "#007BFF",
-        paddingVertical: 10,
-        paddingHorizontal: 20,
-        borderRadius: 20,
+        backgroundColor: colors.gold,
+        paddingVertical: 12,
+        paddingHorizontal: 18,
+        borderRadius: 12,
+        borderBottomWidth: 3,
+        borderBottomColor: colors.darkRed,
     },
     sendButtonText: {
-        color: "#FFFFFF",
-        fontWeight: "bold",
+        color: colors.ink,
+        fontWeight: "800",
+        fontSize: 12,
+        letterSpacing: 1.2,
     },
 });

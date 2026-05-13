@@ -27,26 +27,22 @@ export default function BottomTabNavigator() {
                 headerShown: false,
 
                 tabBarStyle: {
-                    backgroundColor: colors.red,
-
-                    borderTopWidth: 3,
-                    borderTopColor: colors.black,
-
-                    height: 72,
-
-                    paddingBottom: 6,
-                    paddingTop: 6,
+                    backgroundColor: colors.chrome,
+                    borderTopWidth: 2,
+                    borderTopColor: colors.gold,
+                    height: 68,
+                    paddingBottom: 8,
+                    paddingTop: 8,
                 },
 
                 tabBarActiveTintColor: colors.gold,
 
-                tabBarInactiveTintColor:
-                colors.white,
+                tabBarInactiveTintColor: "rgba(255,255,255,0.45)",
 
                 tabBarLabelStyle: {
-                    fontSize: 11,
-                    fontWeight: "900",
-                    letterSpacing: 1,
+                    fontSize: 10,
+                    fontWeight: "800",
+                    letterSpacing: 1.1,
                 },
             }}
         >

@@ -108,11 +108,11 @@ const styles = StyleSheet.create({
     },
 
     trigger: {
-        height: 56,
-        backgroundColor: colors.white,
-        borderWidth: 3,
-        borderColor: colors.black,
-        borderRadius: 10,
+        height: 52,
+        backgroundColor: colors.surfaceElevated,
+        borderWidth: 1,
+        borderColor: colors.border,
+        borderRadius: 12,
         paddingHorizontal: 16,
         flexDirection: "row",
         alignItems: "center",
@@ -121,12 +121,12 @@ const styles = StyleSheet.create({
 
     triggerText: {
         fontSize: 15,
-        fontWeight: "700",
-        color: colors.black,
+        fontWeight: "600",
+        color: colors.textPrimary,
     },
 
     placeholder: {
-        color: "#777",
+        color: colors.textMuted,
         fontWeight: "600",
     },
 
@@ -143,15 +143,15 @@ const styles = StyleSheet.create({
     },
 
     sheet: {
-        backgroundColor: colors.white,
+        backgroundColor: colors.surfaceElevated,
         borderTopLeftRadius: 20,
         borderTopRightRadius: 20,
-        borderTopWidth: 4,
-        borderLeftWidth: 4,
-        borderRightWidth: 4,
-        borderColor: colors.black,
+        borderTopWidth: 2,
+        borderLeftWidth: 1,
+        borderRightWidth: 1,
+        borderColor: colors.borderStrong,
         maxHeight: "70%",
-        paddingBottom: 30,
+        paddingBottom: 28,
     },
 
     sheetHeader: {
@@ -159,23 +159,23 @@ const styles = StyleSheet.create({
         justifyContent: "space-between",
         alignItems: "center",
         padding: 18,
-        borderBottomWidth: 3,
-        borderBottomColor: colors.black,
-        backgroundColor: colors.red,
-        borderTopLeftRadius: 16,
-        borderTopRightRadius: 16,
+        borderBottomWidth: 2,
+        borderBottomColor: colors.gold,
+        backgroundColor: colors.chrome,
+        borderTopLeftRadius: 18,
+        borderTopRightRadius: 18,
     },
 
     sheetTitle: {
-        fontSize: 15,
-        fontWeight: "900",
-        color: colors.white,
-        letterSpacing: 1,
+        fontSize: 14,
+        fontWeight: "800",
+        color: colors.gold,
+        letterSpacing: 1.5,
     },
 
     closeBtn: {
         fontSize: 18,
-        fontWeight: "900",
+        fontWeight: "800",
         color: colors.white,
     },
 
@@ -193,9 +193,9 @@ const styles = StyleSheet.create({
 
     optionText: {
         fontSize: 14,
-        fontWeight: "700",
-        color: colors.black,
-        letterSpacing: 0.5,
+        fontWeight: "600",
+        color: colors.textPrimary,
+        letterSpacing: 0.3,
     },
 
     optionTextSelected: {

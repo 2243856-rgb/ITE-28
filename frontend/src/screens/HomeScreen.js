@@ -61,7 +61,7 @@ export default function HomeScreen() {
                                 globalStyles.subtitle
                             }
                         >
-                            PET SYSTEM STATUS
+                            Operations overview
                         </Text>
                     </View>
 
@@ -166,91 +166,65 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
     grid: {
         flexDirection: "row",
-
         flexWrap: "wrap",
-
-        justifyContent:
-            "space-between",
-
+        justifyContent: "space-between",
         marginBottom: 8,
     },
 
     card: {
         width: "48%",
-
-        height: 130,
-
-        backgroundColor: colors.red,
-
-        borderWidth: 3,
-        borderColor: colors.black,
-
-        borderRadius: 12,
-
-        padding: 18,
-
-        marginBottom: 16,
-
-        justifyContent:
-            "space-between",
+        height: 128,
+        backgroundColor: colors.surfaceElevated,
+        borderWidth: 1,
+        borderColor: colors.border,
+        borderRadius: 14,
+        padding: 16,
+        marginBottom: 14,
+        justifyContent: "space-between",
+        borderBottomWidth: 4,
+        borderBottomColor: colors.red,
     },
 
     goldCard: {
         width: "48%",
-
-        height: 130,
-
-        backgroundColor: colors.gold,
-
-        borderWidth: 3,
-        borderColor: colors.black,
-
-        borderRadius: 12,
-
-        padding: 18,
-
-        marginBottom: 16,
-
+        height: 128,
+        backgroundColor: colors.surfaceGoldTint,
+        borderWidth: 1,
+        borderColor: colors.goldMuted,
+        borderRadius: 14,
+        padding: 16,
+        marginBottom: 14,
         justifyContent: "center",
-
         alignItems: "center",
+        borderBottomWidth: 4,
+        borderBottomColor: colors.gold,
     },
 
     number: {
-        fontSize: 34,
-
-        color: colors.white,
-
-        fontWeight: "900",
+        fontSize: 32,
+        color: colors.red,
+        fontWeight: "800",
     },
 
     label: {
-        color: colors.white,
-
+        color: colors.textSecondary,
         fontWeight: "800",
-
-        letterSpacing: 1,
+        letterSpacing: 1.2,
+        fontSize: 12,
     },
 
     goldText: {
-        color: colors.black,
-
-        fontWeight: "900",
-
-        fontSize: 22,
-
+        color: colors.darkRed,
+        fontWeight: "800",
+        fontSize: 18,
         letterSpacing: 2,
     },
 
     sectionTitle: {
-        fontSize: 16,
-
-        fontWeight: "900",
-
-        color: colors.black,
-
-        letterSpacing: 1,
-
-        marginBottom: 6,
+        fontSize: 13,
+        fontWeight: "800",
+        color: colors.textSecondary,
+        letterSpacing: 1.5,
+        marginBottom: 8,
     },
 });

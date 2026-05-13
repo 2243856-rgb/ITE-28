@@ -1,34 +1,38 @@
 import { StyleSheet } from "react-native";
-
-// We removed the colors import because the file doesn't exist.
-// Hardcoded hex codes are used instead.
+import colors from "./colors/theme";
 
 export default StyleSheet.create({
     screen: {
         flex: 1,
-        backgroundColor: "#FFFFFF",
+        backgroundColor: colors.background,
     },
     container: {
         flex: 1,
-        padding: 20,
+        paddingHorizontal: 22,
+        paddingTop: 8,
     },
+    /** Thin gold trim — retro “accent line” */
     topAccent: {
-        height: 5,
-        backgroundColor: "#007BFF",
+        height: 4,
+        backgroundColor: colors.gold,
     },
     headerContainer: {
-        marginBottom: 20,
+        marginBottom: 22,
     },
     title: {
-        fontSize: 32,
-        fontWeight: "bold",
-        color: "#000000",
+        fontSize: 28,
+        fontWeight: "800",
+        color: colors.textPrimary,
+        letterSpacing: 2,
     },
     subtitle: {
-        fontSize: 18,
-        color: "#666666",
+        fontSize: 15,
+        fontWeight: "600",
+        color: colors.textSecondary,
+        letterSpacing: 1.2,
+        marginTop: 6,
     },
     section: {
-        marginBottom: 20,
+        marginBottom: 22,
     },
 });

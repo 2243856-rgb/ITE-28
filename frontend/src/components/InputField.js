@@ -1,7 +1,7 @@
 import React from "react";
 import { View, Text, TextInput, StyleSheet } from "react-native";
+import colors from "../theme/colors/theme";
 
-// We removed the colors import because the file doesn't exist
 export default function InputField({
     label,
     placeholder,
@@ -12,11 +12,13 @@ export default function InputField({
 }) {
     return (
         <View style={styles.container}>
-            {label && <Text style={styles.label}>{label}</Text>}
+            {label ? (
+                <Text style={styles.label}>{label}</Text>
+            ) : null}
             <TextInput
                 style={styles.input}
                 placeholder={placeholder}
-                placeholderTextColor="#999"
+                placeholderTextColor={colors.textMuted}
                 value={value}
                 onChangeText={onChangeText}
                 secureTextEntry={secureTextEntry}
@@ -28,23 +30,24 @@ export default function InputField({
 
 const styles = StyleSheet.create({
     container: {
-        marginBottom: 15,
+        marginBottom: 16,
         width: "100%",
     },
     label: {
-        fontSize: 14,
-        fontWeight: "bold",
-        marginBottom: 5,
-        color: "#333", // Manual color instead of colors.text
+        fontSize: 12,
+        fontWeight: "800",
+        marginBottom: 8,
+        color: colors.textSecondary,
+        letterSpacing: 1.2,
     },
     input: {
-        height: 50,
+        height: 52,
         borderWidth: 1,
-        borderColor: "#CCC", // Manual color instead of colors.border
-        borderRadius: 8,
-        paddingHorizontal: 15,
+        borderColor: colors.border,
+        borderRadius: 12,
+        paddingHorizontal: 16,
         fontSize: 16,
-        color: "#000",
-        backgroundColor: "#F9F9F9",
+        color: colors.textPrimary,
+        backgroundColor: colors.surfaceElevated,
     },
 });

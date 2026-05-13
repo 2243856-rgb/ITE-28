@@ -67,7 +67,14 @@ export default function OnlineStatusScreen() {
 
                     {/* Overall status banner */}
                     <View style={[styles.banner, allOnline ? styles.bannerGreen : styles.bannerRed]}>
-                        <Text style={styles.bannerText}>
+                        <Text
+                            style={[
+                                styles.bannerText,
+                                allOnline
+                                    ? styles.bannerTextOnLight
+                                    : styles.bannerTextOnRed,
+                            ]}
+                        >
                             {allOnline ? "✓  ALL SYSTEMS OPERATIONAL" : "⚠  SOME SERVICES OFFLINE"}
                         </Text>
                     </View>
@@ -92,34 +99,45 @@ export default function OnlineStatusScreen() {
 
 const styles = StyleSheet.create({
     banner: {
-        borderRadius: 10,
-        borderWidth: 3,
-        borderColor: colors.black,
-        paddingVertical: 14,
+        borderRadius: 14,
+        borderWidth: 1,
+        borderColor: colors.borderStrong,
+        paddingVertical: 16,
         paddingHorizontal: 18,
         alignItems: "center",
     },
 
     bannerGreen: {
-        backgroundColor: colors.gold,
+        backgroundColor: colors.surfaceGoldTint,
+        borderLeftWidth: 4,
+        borderLeftColor: colors.gold,
     },
 
     bannerRed: {
         backgroundColor: colors.red,
+        borderLeftWidth: 4,
+        borderLeftColor: colors.darkRed,
     },
 
     bannerText: {
-        fontWeight: "900",
-        fontSize: 15,
-        color: colors.black,
+        fontWeight: "800",
+        fontSize: 14,
         letterSpacing: 1,
     },
 
+    bannerTextOnLight: {
+        color: colors.ink,
+    },
+
+    bannerTextOnRed: {
+        color: colors.white,
+    },
+
     sectionTitle: {
-        fontSize: 13,
-        fontWeight: "900",
-        color: colors.darkRed,
-        letterSpacing: 1,
+        fontSize: 12,
+        fontWeight: "800",
+        color: colors.textSecondary,
+        letterSpacing: 1.5,
         marginBottom: 14,
     },
 
@@ -143,8 +161,8 @@ const styles = StyleSheet.create({
         height: 10,
         borderRadius: 5,
         marginRight: 10,
-        borderWidth: 2,
-        borderColor: colors.black,
+        borderWidth: 1,
+        borderColor: colors.borderStrong,
     },
 
     dotOnline: {
@@ -157,9 +175,9 @@ const styles = StyleSheet.create({
 
     serviceLabel: {
         fontSize: 12,
-        fontWeight: "900",
-        color: colors.black,
-        letterSpacing: 0.5,
+        fontWeight: "800",
+        color: colors.textPrimary,
+        letterSpacing: 0.6,
     },
 
     rowRight: {
@@ -183,8 +201,8 @@ const styles = StyleSheet.create({
     },
 
     badgeOnline: {
-        backgroundColor: colors.gold,
-        borderColor: colors.black,
+        backgroundColor: colors.surfaceGoldTint,
+        borderColor: colors.gold,
     },
 
     badgeOffline: {
@@ -199,7 +217,7 @@ const styles = StyleSheet.create({
     },
 
     textOnline: {
-        color: colors.black,
+        color: colors.darkRed,
     },
 
     textOffline: {

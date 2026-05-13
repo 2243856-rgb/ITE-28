@@ -72,7 +72,7 @@ export default function LoginScreen({
                             globalStyles.subtitle
                         }
                     >
-                        RETRO PET MANAGEMENT
+                        Clinic console · retro controls
                     </Text>
                 </View>
 
@@ -113,8 +113,14 @@ export default function LoginScreen({
                 </View>
 
                 <View style={styles.footer}>
+                    <Text style={styles.footerGold}>
+                        —
+                    </Text>
                     <Text style={styles.footerText}>
-                        8BIT RETRO UI
+                        NestVet
+                    </Text>
+                    <Text style={styles.footerMuted}>
+                        Red · cream · gold
                     </Text>
                 </View>
             </View>
@@ -124,18 +130,27 @@ export default function LoginScreen({
 
 const styles = StyleSheet.create({
     footer: {
-        marginTop: 10,
-
+        marginTop: 24,
         alignItems: "center",
+        paddingBottom: 16,
     },
-
+    footerGold: {
+        color: colors.gold,
+        fontSize: 18,
+        letterSpacing: 4,
+        marginBottom: 4,
+    },
     footerText: {
-        color: colors.darkRed,
-
+        color: colors.textPrimary,
         fontWeight: "800",
-
-        letterSpacing: 2,
-
-        fontSize: 12,
+        letterSpacing: 3,
+        fontSize: 13,
+    },
+    footerMuted: {
+        color: colors.textMuted,
+        fontSize: 11,
+        fontWeight: "600",
+        marginTop: 6,
+        letterSpacing: 1.5,
     },
 });

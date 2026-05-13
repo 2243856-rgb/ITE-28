@@ -42,25 +42,23 @@ export default function AppNavigator() {
 
                 screenOptions={{
                     headerStyle: {
-                        backgroundColor:
-                        colors.red,
+                        backgroundColor: colors.chrome,
+                        borderBottomWidth: 2,
+                        borderBottomColor: colors.gold,
                     },
 
-                    headerTintColor:
-                    colors.white,
+                    headerTintColor: colors.gold,
 
-                    headerShadowVisible:
-                        false,
+                    headerShadowVisible: false,
 
                     contentStyle: {
-                        backgroundColor:
-                        colors.background,
+                        backgroundColor: colors.background,
                     },
 
                     headerTitleStyle: {
-                        fontWeight: "900",
-
-                        letterSpacing: 1,
+                        fontWeight: "800",
+                        letterSpacing: 1.2,
+                        color: colors.white,
                     },
                 }}
             >
