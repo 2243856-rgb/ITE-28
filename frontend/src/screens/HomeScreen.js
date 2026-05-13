@@ -50,18 +50,10 @@ export default function HomeScreen() {
                             globalStyles.headerContainer
                         }
                     >
-                        <Text
-                            style={globalStyles.title}
-                        >
-                            DASHBOARD
-                        </Text>
+                        <Text style={globalStyles.title}>NestVet</Text>
 
-                        <Text
-                            style={
-                                globalStyles.subtitle
-                            }
-                        >
-                            Operations overview
+                        <Text style={globalStyles.subtitle}>
+                            the future of vet care, delivered to you
                         </Text>
                     </View>
 

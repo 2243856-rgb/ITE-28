@@ -1,35 +1,38 @@
 /**
- * NestVet — retro console palette (8BitDo–inspired: cream chassis, red keys, gold trim).
- * No blues; tuned for light UI with dark navigation chrome.
+ * NestVet brand palette — cream field, vibrant orange wordmark, black type
+ * (aligned with NestVet logo: Corgi + nest on warm cream).
  */
-export default {
-    // Core brand
-    red: "#B63A32",
-    darkRed: "#7A241F",
-    gold: "#C9A227",
-    goldMuted: "#E5D4A1",
+const primary = "#E8782E";
+const primaryDark = "#C86220";
+const nestBrown = "#4A3628";
 
-    // Neutrals
-    ink: "#252220",
+export default {
+    primary,
+    primaryDark,
+    nestBrown,
+
+    /** Legacy keys — mapped so existing screens keep working */
+    red: primary,
+    darkRed: nestBrown,
+    gold: primary,
+    goldMuted: "#F0C9A0",
+
+    ink: "#1A1A1A",
     black: "#1A1A1A",
     white: "#FFFFFF",
 
-    // Surfaces
-    background: "#EDE6DC",
-    surface: "#FFFBF7",
+    background: "#FAF6F0",
+    surface: "#FFFFFF",
     surfaceElevated: "#FFFFFF",
-    surfaceGoldTint: "#F7F0E2",
+    surfaceGoldTint: "#FFF4EC",
 
-    // Text
-    textPrimary: "#252220",
-    textSecondary: "#5C534A",
-    textMuted: "#8A8178",
+    textPrimary: "#1A1A1A",
+    textSecondary: "#4A4540",
+    textMuted: "#7A746C",
 
-    // Lines
-    border: "#D4C9BA",
-    borderStrong: "#BFB3A4",
+    border: "#E8E2D8",
+    borderStrong: "#D4CDC2",
 
-    // Chrome (nav / tab bar)
-    chrome: "#2E2A28",
-    chromeBorder: "#1A1817",
+    chrome: "#1A1A1A",
+    chromeBorder: primary,
 };

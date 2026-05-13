@@ -16,7 +16,7 @@ const SYSTEM_SERVICES = [
     { id: "2", label: "DATABASE",         status: "ONLINE",  uptime: "99.7%" },
     { id: "3", label: "APPOINTMENT SVC",  status: "ONLINE",  uptime: "98.5%" },
     { id: "4", label: "PET RECORDS SVC",  status: "ONLINE",  uptime: "99.1%" },
-    { id: "5", label: "CHATBOT SVC",      status: "ONLINE",  uptime: "97.3%" },
+    { id: "5", label: "HEALTH RECORDS",   status: "ONLINE",  uptime: "97.3%" },
     { id: "6", label: "NOTIFICATION SVC", status: "OFFLINE", uptime: "0.0%"  },
 ];
 

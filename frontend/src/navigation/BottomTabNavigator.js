@@ -1,22 +1,14 @@
 import React from "react";
 
-import { createBottomTabNavigator }
-    from "@react-navigation/bottom-tabs";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
-import Ionicons
-    from "@expo/vector-icons/Ionicons";
+import Ionicons from "@expo/vector-icons/Ionicons";
 
-import HomeScreen
-    from "../screens/HomeScreen";
+import HomeScreen from "../screens/HomeScreen";
 
-import ChatbotScreen
-    from "../screens/ChatbotScreen";
+import PetProfileScreen from "../screens/PetProfileScreen";
 
-import PetProfileScreen
-    from "../screens/PetProfileScreen";
-
-import colors
-    from "../theme/colors/theme";
+import colors from "../theme/colors/theme";
 
 const Tab = createBottomTabNavigator();
 
@@ -29,15 +21,15 @@ export default function BottomTabNavigator() {
                 tabBarStyle: {
                     backgroundColor: colors.chrome,
                     borderTopWidth: 2,
-                    borderTopColor: colors.gold,
-                    height: 68,
+                    borderTopColor: colors.primary,
+                    height: 64,
                     paddingBottom: 8,
-                    paddingTop: 8,
+                    paddingTop: 6,
                 },
 
-                tabBarActiveTintColor: colors.gold,
+                tabBarActiveTintColor: colors.primary,
 
-                tabBarInactiveTintColor: "rgba(255,255,255,0.45)",
+                tabBarInactiveTintColor: "rgba(255,255,255,0.5)",
 
                 tabBarLabelStyle: {
                     fontSize: 10,
@@ -49,35 +41,9 @@ export default function BottomTabNavigator() {
             <Tab.Screen
                 name="HOME"
                 component={HomeScreen}
-
                 options={{
-                    tabBarIcon: ({
-                                     color,
-                                     size,
-                                 }) => (
-                        <Ionicons
-                            name="home"
-                            size={size}
-                            color={color}
-                        />
-                    ),
-                }}
-            />
-
-            <Tab.Screen
-                name="CHATBOT"
-                component={ChatbotScreen}
-
-                options={{
-                    tabBarIcon: ({
-                                     color,
-                                     size,
-                                 }) => (
-                        <Ionicons
-                            name="chatbox"
-                            size={size}
-                            color={color}
-                        />
+                    tabBarIcon: ({ color, size }) => (
+                        <Ionicons name="home" size={size} color={color} />
                     ),
                 }}
             />
@@ -85,17 +51,9 @@ export default function BottomTabNavigator() {
             <Tab.Screen
                 name="PETS"
                 component={PetProfileScreen}
-
                 options={{
-                    tabBarIcon: ({
-                                     color,
-                                     size,
-                                 }) => (
-                        <Ionicons
-                            name="paw"
-                            size={size}
-                            color={color}
-                        />
+                    tabBarIcon: ({ color, size }) => (
+                        <Ionicons name="paw" size={size} color={color} />
                     ),
                 }}
             />

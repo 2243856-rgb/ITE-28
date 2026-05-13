@@ -2,52 +2,45 @@
 
 import React from "react";
 
-import {
-    NavigationContainer,
-} from "@react-navigation/native";
+import { NavigationContainer } from "@react-navigation/native";
 
-import {
-    createNativeStackNavigator,
-} from "@react-navigation/native-stack";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
-import LoginScreen
-    from "../screens/LoginScreen";
+import LoginScreen from "../screens/LoginScreen";
 
-import RegisterScreen
-    from "../screens/RegisterScreen";
+import RegisterScreen from "../screens/RegisterScreen";
 
-import BottomTabNavigator
-    from "./BottomTabNavigator";
+import BottomTabNavigator from "./BottomTabNavigator";
 
-import BookAppointmentScreen
-    from "../screens/BookAppointmentScreen";
+import BookAppointmentScreen from "../screens/BookAppointmentScreen";
 
-import PetsScreen
-    from "../screens/PetProfileScreen";
+import PetProfileScreen from "../screens/PetProfileScreen";
 
-import OnlineStatusScreen
-    from "../screens/OnlineStatusScreen";
+import PetsScreen from "../screens/PetsScreen";
 
-import colors
-    from "../theme/colors/theme";
+import StaffScreen from "../screens/StaffScreen";
 
-const Stack =
-    createNativeStackNavigator();
+import BookingsScreen from "../screens/BookingsScreen";
+
+import OnlineStatusScreen from "../screens/OnlineStatusScreen";
+
+import colors from "../theme/colors/theme";
+
+const Stack = createNativeStackNavigator();
 
 export default function AppNavigator() {
     return (
         <NavigationContainer>
             <Stack.Navigator
                 initialRouteName="Login"
-
                 screenOptions={{
                     headerStyle: {
                         backgroundColor: colors.chrome,
                         borderBottomWidth: 2,
-                        borderBottomColor: colors.gold,
+                        borderBottomColor: colors.primary,
                     },
 
-                    headerTintColor: colors.gold,
+                    headerTintColor: colors.primary,
 
                     headerShadowVisible: false,
 
@@ -65,23 +58,16 @@ export default function AppNavigator() {
                 <Stack.Screen
                     name="Login"
                     component={LoginScreen}
-
                     options={{
                         headerShown: false,
                     }}
                 />
 
-                <Stack.Screen
-                    name="Register"
-                    component={RegisterScreen}
-                />
+                <Stack.Screen name="Register" component={RegisterScreen} />
 
                 <Stack.Screen
                     name="Main"
-                    component={
-                        BottomTabNavigator
-                    }
-
+                    component={BottomTabNavigator}
                     options={{
                         headerShown: false,
                     }}
@@ -89,29 +75,35 @@ export default function AppNavigator() {
 
                 <Stack.Screen
                     name="BookAppointment"
-                    component={
-                        BookAppointmentScreen
-                    }
-
+                    component={BookAppointmentScreen}
                     options={{
-                        title:
-                            "BOOK APPOINTMENT",
+                        title: "BOOK APPOINTMENT",
                     }}
                 />
 
                 <Stack.Screen
-    name="AdminPets"
-    component={PetsScreen} 
-    options={{ title: "PETS" }}
-/>
+                    name="AdminPets"
+                    component={PetsScreen}
+                    options={{ title: "PETS" }}
+                />
 
+                <Stack.Screen
+                    name="Staff"
+                    component={StaffScreen}
+                    options={{ title: "STAFF" }}
+                />
+
+                <Stack.Screen
+                    name="Bookings"
+                    component={BookingsScreen}
+                    options={{ title: "BOOKINGS" }}
+                />
 
                 <Stack.Screen
                     name="OnlineStatus"
                     component={OnlineStatusScreen}
                     options={{ title: "STATUS" }}
                 />
-
             </Stack.Navigator>
         </NavigationContainer>
     );
